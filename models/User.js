@@ -1,4 +1,4 @@
-const mongoose = required("mongoose");
+const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -23,4 +23,4 @@ const UserSchema = new mongoose.Schema({
   }
 });
 
-module.exports = User = mongoose.model("user", "User"); // Export variable "User" and set it to "mongoose.model("user", "User")".
+module.exports = User = mongoose.model("user", UserSchema); // Export variable "User" and set it to "mongoose.model("user", "User")".

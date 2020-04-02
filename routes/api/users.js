@@ -1,6 +1,8 @@
 const bcrypt = require("bcryptjs");
+const config = require("config");
 const express = require("express");
 const gravatar = require("gravatar");
+const jwt = require("jsonwebtoken");
 const router = express.Router();
 const { check, validationResult } = require("express-validator/check");
 
@@ -31,7 +33,7 @@ router.post(
     const { name, email, password } = req.body; // Extract needed data from the HTTP request.
 
     try {
-      let user = await User.findOne({ email });
+      let user = await User.findOne({ email }); // It returns a Promise.
 
       // See if user exists.
       if (user) {
@@ -55,13 +57,29 @@ router.post(
         password
       });
 
-      const salt = await bcrypt.genSalt(10); // Password hashing settings aka. "salt", use recommended 10 rounds.
+      // Encrypt and save password.
+      const salt = await bcrypt.genSalt(10); // Password hashing settings aka. "salt", use recommended 10 rounds, it returns a Promise.
       user.password = await bcrypt.hash(password, salt); // Hash password.
-      user.save(); // Save user to the database.
 
-      // Return JSON Web Token (JWT) in order to be logged in right away after registration.
+      await user.save(); // Save user to the database, it returns a Promise.
 
-      res.send("User registered");
+      // Get payload in a form of JSON Web Token (JWT) which includes the user ID in order to be logged in right away after registration.
+      const payload = {
+        user: {
+          id: user.id
+        }
+      };
+
+      // Asynchronous sign of a token, pass a payload and secret, with default HMAC SHA256 and expiration in 1 hour. On callback throw an error or send a token.
+      jwt.sign(
+        payload,
+        config.get("jwtSecret"),
+        { expiresIn: 3600 },
+        (err, token) => {
+          if (err) throw err; // Throw an error.
+          res.json({ token }); // Send a token in HTTP response to the client.
+        }
+      );
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server error");

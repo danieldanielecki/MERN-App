@@ -14,14 +14,12 @@ const User = require("../../models/User");
 router.post(
   "/",
   [
-    check("name", "Name is required")
-      .not()
-      .isEmpty(),
+    check("name", "Name is required").not().isEmpty(),
     check("email", "Please include a valid email").isEmail(),
     check(
       "password",
       "Please enter a password with 6 or more characters"
-    ).isLength({ min: 6 })
+    ).isLength({ min: 6 }),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -46,7 +44,7 @@ router.post(
       const avatar = gravatar.url(email, {
         s: "200", // Size in pixels for single pixel dimension, since the images are squares.
         r: "pg", // Rating (see: https://en.gravatar.com/site/implement/images/ and then "Rating").
-        d: "mm" // Set up a sample default image.
+        d: "mm", // Set up a sample default image.
       });
 
       // Create new instance of a user (it doesn't saves the user to database yet).
@@ -54,7 +52,7 @@ router.post(
         name,
         email,
         avatar,
-        password
+        password,
       });
 
       // Encrypt and save password.
@@ -66,8 +64,8 @@ router.post(
       // Get payload in a form of JSON Web Token (JWT) which includes the user ID in order to be logged in right away after registration.
       const payload = {
         user: {
-          id: user.id
-        }
+          id: user.id,
+        },
       };
 
       // Asynchronous sign of a token, pass a payload and secret, with default HMAC SHA256 and expiration in 1 hour. On callback throw an error or send a token.
@@ -82,7 +80,7 @@ router.post(
       );
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server error");
+      res.status(500).send("Server error"); // General purpose server error, never disclose any sensitive information here.
     }
   }
 );

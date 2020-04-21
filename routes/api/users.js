@@ -1,10 +1,11 @@
+// Whenever Mongoose's methods are being used we need to use await, because it returns a Promise.
 const bcrypt = require("bcryptjs");
 const config = require("config");
 const express = require("express");
 const gravatar = require("gravatar");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
-const { check, validationResult } = require("express-validator/check");
+const { check, validationResult } = require("express-validator");
 
 const User = require("../../models/User");
 

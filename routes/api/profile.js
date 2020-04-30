@@ -147,4 +147,21 @@ router.get("/user/:user_id", async (req, res) => {
   }
 });
 
+// @route DELETE api/profile
+// @desc Delete profile, user & posts
+// @access Private
+// Middleware is being added as a second parameter always. Whatever route we want to protect, just add "auth" as a second parameter.
+router.delete("/", auth, async (req, res) => {
+  try {
+    // @todo - remove users posts
+    await Profile.findOneAndRemove({ user: req.user.id }); // Remove Profile.
+    await User.findOneAndRemove({ _id: req.user.id }); // Remove User.
+
+    res.json({ msg: "User deleted" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
+  }
+});
+
 module.exports = router;

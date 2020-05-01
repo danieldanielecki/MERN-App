@@ -67,7 +67,7 @@ router.post(
 
     /* Build profile object. */
     const profileFields = {};
-    profileFields.user = req.user.id;
+    profileFields.user = req.user.id; // Get user from the token.
     if (company) profileFields.company = company;
     if (website) profileFields.website = website;
     if (location) profileFields.location = location;
@@ -92,7 +92,7 @@ router.post(
       if (profile) {
         // Update the profile.
         profile = await Profile.findOneAndUpdate(
-          { user: req.user.id },
+          { user: req.user.id }, // Get user from the token.
           { $set: profileFields },
           { new: true }
         );
@@ -163,5 +163,63 @@ router.delete("/", auth, async (req, res) => {
     res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
   }
 });
+
+// @route PUT api/profile/experience
+// @desc Add Profile experience
+// @access Private
+// Middleware is being added as a second parameter always. Because validation and auth middleware must be used together, pass this as an array.
+router.put(
+  "/experience",
+  [
+    auth,
+    [
+      check("title", "Title is required").not().isEmpty(),
+      check("company", "Company is required").not().isEmpty(),
+      check("from", "From date is required").not().isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+
+    // Check for errors.
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() }); // Error occured, therefore display the error.
+    }
+
+    // Pull that details out from "req.body".
+    const {
+      title,
+      company,
+      location,
+      from,
+      to,
+      current,
+      description,
+    } = req.body;
+
+    // Create object with data that the user submits.
+    const newExp = {
+      title, // Equivalent to "title:title"
+      company, // Equivalent to "company:company" etc...
+      location,
+      from,
+      to,
+      current,
+      description,
+    };
+
+    try {
+      const profile = await Profile.findOne({ user: req.user.id }); // Get user from the token.
+
+      profile.experience.unshift(newExp); // "unshift()" works like "push()", just it pushes the element to the beginning on an array.
+
+      await profile.save(); // Save profile.
+      res.json(profile); // Send back profile.
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
+    }
+  }
+);
 
 module.exports = router;

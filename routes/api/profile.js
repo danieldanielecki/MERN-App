@@ -14,7 +14,7 @@ const User = require("../../models/User");
 router.get("/me", auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({
-      user: req.user.id, // Equivalent to "mongoose.Schema.Types.ObjectId" in Profile model.
+      user: req.user.id, // Equivalent to "mongoose.Schema.Types.ObjectId" in Profile model. Get user by ID from the token.
     }).populate("user", ["name", "avatar"]); // Populate name and avatar from User model.
 
     // Check if there is no profile.
@@ -22,7 +22,7 @@ router.get("/me", auth, async (req, res) => {
       return res.status(400).json({ msg: "There is no profile for this user" });
     }
 
-    res.json(profile); // Send the profile.
+    res.json(profile); // Send back profile in response.
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
@@ -67,7 +67,7 @@ router.post(
 
     /* Build profile object. */
     const profileFields = {};
-    profileFields.user = req.user.id; // Get user from the token.
+    profileFields.user = req.user.id; // Get user by ID from the token.
     if (company) profileFields.company = company;
     if (website) profileFields.website = website;
     if (location) profileFields.location = location;
@@ -86,23 +86,24 @@ router.post(
     if (instagram) profileFields.social.instagram = instagram;
 
     try {
-      let profile = await Profile.findOne({ user: req.user.id }); // Get user from the token.
+      let profile = await Profile.findOne({ user: req.user.id }); // Get user by ID from the token.
 
       // Check if profile exists.
       if (profile) {
         // Update the profile.
         profile = await Profile.findOneAndUpdate(
-          { user: req.user.id }, // Get user from the token.
+          { user: req.user.id }, // Get user by ID from the token.
           { $set: profileFields },
           { new: true }
         );
 
-        return res.json(profile);
+        return res.json(profile); // Send back profile in response.
       }
 
       profile = new Profile(profileFields); // Create profile.
+
       await profile.save(); // Save profile.
-      res.json(profile); // Send back profile.
+      res.json(profile); // Send back profile in response.
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
@@ -123,7 +124,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// @route GET api/profile/user/:user_id
+// @route GET api/profile/user/:user_id ":user_id" is a placeholder
 // @desc Get profile by user ID
 // @access Public
 router.get("/user/:user_id", async (req, res) => {
@@ -135,7 +136,7 @@ router.get("/user/:user_id", async (req, res) => {
     // Check if there is no profile for this "user_id".
     if (!profile) return res.status(400).json({ msg: "Profile not found" });
 
-    res.json(profile); // Send the profile.
+    res.json(profile); // Send back profile in response.
   } catch (err) {
     console.error(err.message);
 
@@ -154,8 +155,8 @@ router.get("/user/:user_id", async (req, res) => {
 router.delete("/", auth, async (req, res) => {
   try {
     // @todo - remove users posts
-    await Profile.findOneAndRemove({ user: req.user.id }); // Remove Profile.
-    await User.findOneAndRemove({ _id: req.user.id }); // Remove User.
+    await Profile.findOneAndRemove({ user: req.user.id }); // Remove Profile by ID based on the token.
+    await User.findOneAndRemove({ _id: req.user.id }); // Remove User by ID based on the token.
 
     res.json({ msg: "User deleted" });
   } catch (err) {
@@ -209,17 +210,40 @@ router.put(
     };
 
     try {
-      const profile = await Profile.findOne({ user: req.user.id }); // Get user from the token.
+      const profile = await Profile.findOne({ user: req.user.id }); // Get user by ID from the token.
 
       profile.experience.unshift(newExp); // "unshift()" works like "push()", just it pushes the element to the beginning on an array.
 
       await profile.save(); // Save profile.
-      res.json(profile); // Send back profile.
+      res.json(profile); // Send back profile in response.
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
     }
   }
 );
+
+// @route DELETE api/profile/experience/:exp_id ":exp_id" is a placeholder
+// @desc Delete experience from Profile
+// @access Private
+// Middleware is being added as a second parameter always. Whatever route we want to protect, just add "auth" as a second parameter.
+router.delete("/experience/:exp_id", auth, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id }); // Get user by ID from the token.
+
+    // Get experience to be removed by index.
+    const removeIndex = profile.experience
+      .map((item) => item.id)
+      .indexOf(req.params.exp_id);
+
+    profile.experience.splice(removeIndex, 1); //Take out the desired experience to be removed.
+
+    await profile.save(); // Save profile.
+    res.json(profile); // Send back profile in response.
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
+  }
+});
 
 module.exports = router;

@@ -1,6 +1,8 @@
 // Whenever Mongoose's methods are being used we need to use await, because it returns a Promise.
 const auth = require("../../middleware/auth");
+const config = require("config");
 const express = require("express");
+const request = require("request");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
 
@@ -240,6 +242,120 @@ router.delete("/experience/:exp_id", auth, async (req, res) => {
 
     await profile.save(); // Save profile.
     res.json(profile); // Send back profile in response.
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
+  }
+});
+
+// @route PUT api/profile/education
+// @desc Add Profile education
+// @access Private
+// Middleware is being added as a second parameter always. Because validation and auth middleware must be used together, pass this as an array.
+router.put(
+  "/education",
+  [
+    auth,
+    [
+      check("school", "School is required").not().isEmpty(),
+      check("degree", "Degree is required").not().isEmpty(),
+      check("fieldofstudy", "Field of study is required").not().isEmpty(),
+      check("from", "From date is required").not().isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+
+    // Check for errors.
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() }); // Error occured, therefore display the error.
+    }
+
+    // Pull that details out from "req.body".
+    const {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description,
+    } = req.body;
+
+    // Create object with data that the user submits.
+    const newEdu = {
+      school, // Equivalent to "school:school"
+      degree, // Equivalent to "degree:degree" etc...
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description,
+    };
+
+    try {
+      const profile = await Profile.findOne({ user: req.user.id }); // Get user by ID from the token.
+
+      profile.education.unshift(newEdu); // "unshift()" works like "push()", just it pushes the element to the beginning on an array.
+
+      await profile.save(); // Save profile.
+      res.json(profile); // Send back profile in response.
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
+    }
+  }
+);
+
+// @route DELETE api/profile/education/:exp_id ":exp_id" is a placeholder
+// @desc Delete education from Profile
+// @access Private
+// Middleware is being added as a second parameter always. Whatever route we want to protect, just add "auth" as a second parameter.
+router.delete("/education/:exp_id", auth, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id }); // Get user by ID from the token.
+
+    // Get education to be removed by index.
+    const removeIndex = profile.education
+      .map((item) => item.id)
+      .indexOf(req.params.exp_id);
+
+    profile.education.splice(removeIndex, 1); //Take out the desired education to be removed.
+
+    await profile.save(); // Save profile.
+    res.json(profile); // Send back profile in response.
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
+  }
+});
+
+// @route GET api/profile/github/:username ":username" is a placeholder
+// @desc Get user repositories from GitHub
+// @access Public
+router.get("/github/:username", (req, res) => {
+  try {
+    // Set options for fetching user's GitHub repositories.
+    const options = {
+      headers: { "user-agent": "node.js" },
+      method: "GET",
+      uri: `https://api.github.com/users/${
+        req.params.username
+      }/repos?per_page=5&sort=created:asc&client_id=${config.get(
+        "githubClientId"
+      )}&client_secret=${config.get("githubSecret")}`,
+    };
+
+    request(options, (error, response, body) => {
+      if (error) console.error(error); // Console log any errors.
+
+      // Check for non successful HTTP status codes.
+      if (response.statusCode !== 200) {
+        return res.status(404).json({ msg: "No GitHub profile found" }); // Status code is different than "200" ("OK"), then display "404" ("Not Found") status.
+      }
+
+      res.json(JSON.parse(body)); // Parse string - in which form the "body" is, to JSON.
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.

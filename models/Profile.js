@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const ProfileSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId, // The ObjectId is an unique object for every new user starting from "_" which can be seen in the MongoDB Atlas.
-    ref: "user",
+    ref: "user", // Connect 'users' to profile.
   },
   company: {
     type: String,
@@ -111,4 +111,4 @@ const ProfileSchema = new mongoose.Schema({
   },
 });
 
-module.exports = Profile = mongoose.model("profile", ProfileSchema);
+module.exports = Profile = mongoose.model("profile", ProfileSchema); // Export variable "Profile" and set it to "mongoose.model("profile", ProfileSchema)".

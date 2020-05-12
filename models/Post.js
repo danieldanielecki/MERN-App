@@ -31,8 +31,10 @@ const PostSchema = new Schema({
         type: Schema.Types.ObjectId, // The ObjectId is an unique object for every new user starting from "_" which can be seen in the MongoDB Atlas.
         ref: "users", // That way we know which like came from which user.
       },
-      text: String,
-      required: true,
+      text: {
+        type: String,
+        required: true,
+      },
       name: {
         type: String,
       },

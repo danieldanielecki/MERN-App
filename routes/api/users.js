@@ -11,7 +11,7 @@ const User = require("../../models/User");
 
 // @route   POST api/users
 // @desc    Register user
-// @access  Public
+// @access  Public (User doesn't has to be logged in)
 router.post(
   "/",
   [

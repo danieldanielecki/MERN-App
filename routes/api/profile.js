@@ -11,7 +11,7 @@ const User = require("../../models/User");
 
 // @route   GET api/profile/me
 // @desc    Get current user's profile
-// @access  Private
+// @access  Private (User has to be logged in)
 // Middleware is being added as a second parameter always. Whatever route we want to protect, just add "auth" as a second parameter.
 router.get("/me", auth, async (req, res) => {
   try {
@@ -24,7 +24,7 @@ router.get("/me", auth, async (req, res) => {
       return res.status(400).json({ msg: "There is no profile for this user" });
     }
 
-    res.json(profile); // Send back profile in response.
+    res.json(profile); // Send back profile in HTTP response.
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
@@ -33,7 +33,7 @@ router.get("/me", auth, async (req, res) => {
 
 // @route   POST api/profile
 // @desc    Create or update user's profile
-// @access  Private
+// @access  Private (User has to be logged in)
 // Middleware is being added as a second parameter always. Because validation and auth middleware must be used together, pass this as an array.
 router.post(
   "/",
@@ -99,13 +99,13 @@ router.post(
           { new: true }
         );
 
-        return res.json(profile); // Send back profile in response.
+        return res.json(profile); // Send back profile in HTTP response.
       }
 
       profile = new Profile(profileFields); // Create profile.
 
       await profile.save(); // Save profile.
-      res.json(profile); // Send back profile in response.
+      res.json(profile); // Send back profile in HTTP response.
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
@@ -113,22 +113,22 @@ router.post(
   }
 );
 
-// @route GET api/profile
-// @desc Get all profiles
-// @access Public
+// @route  GET api/profile
+// @desc   Get all profiles
+// @access Public (User doesn't has to be logged in)
 router.get("/", async (req, res) => {
   try {
     const profiles = await Profile.find().populate("user", ["name", "avatar"]); // Populate name and avatar from User model.
-    res.json(profiles);
+    res.json(profiles); // Send back profiles in HTTP response.
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
   }
 });
 
-// @route GET api/profile/user/:user_id ":user_id" is a placeholder
-// @desc Get profile by user ID
-// @access Public
+// @route  GET api/profile/user/:user_id ":user_id" is a placeholder
+// @desc   Get profile by user ID
+// @access Public (User doesn't has to be logged in)
 router.get("/user/:user_id", async (req, res) => {
   try {
     const profile = await Profile.findOne({
@@ -138,7 +138,7 @@ router.get("/user/:user_id", async (req, res) => {
     // Check if there is no profile for this "user_id".
     if (!profile) return res.status(400).json({ msg: "Profile not found" });
 
-    res.json(profile); // Send back profile in response.
+    res.json(profile); // Send back profile in HTTP response.
   } catch (err) {
     console.error(err.message);
 
@@ -150,9 +150,9 @@ router.get("/user/:user_id", async (req, res) => {
   }
 });
 
-// @route DELETE api/profile
-// @desc Delete profile, user & posts
-// @access Private
+// @route  DELETE api/profile
+// @desc   Delete profile, user & posts
+// @access Private (User has to be logged in)
 // Middleware is being added as a second parameter always. Whatever route we want to protect, just add "auth" as a second parameter.
 router.delete("/", auth, async (req, res) => {
   try {
@@ -160,16 +160,16 @@ router.delete("/", auth, async (req, res) => {
     await Profile.findOneAndRemove({ user: req.user.id }); // Remove Profile by ID based on the token.
     await User.findOneAndRemove({ _id: req.user.id }); // Remove User by ID based on the token.
 
-    res.json({ msg: "User deleted" });
+    res.json({ msg: "User deleted" }); // Send back message in HTTP response.
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
   }
 });
 
-// @route PUT api/profile/experience
-// @desc Add Profile experience
-// @access Private
+// @route  PUT api/profile/experience
+// @desc   Add Profile experience
+// @access Private (User has to be logged in)
 // Middleware is being added as a second parameter always. Because validation and auth middleware must be used together, pass this as an array.
 router.put(
   "/experience",
@@ -217,7 +217,7 @@ router.put(
       profile.experience.unshift(newExp); // "unshift()" works like "push()", just it pushes the element to the beginning on an array.
 
       await profile.save(); // Save profile.
-      res.json(profile); // Send back profile in response.
+      res.json(profile); // Send back profile in HTTP response.
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
@@ -225,9 +225,9 @@ router.put(
   }
 );
 
-// @route DELETE api/profile/experience/:exp_id ":exp_id" is a placeholder
-// @desc Delete experience from Profile
-// @access Private
+// @route  DELETE api/profile/experience/:exp_id ":exp_id" is a placeholder
+// @desc   Delete experience from Profile
+// @access Private (User has to be logged in)
 // Middleware is being added as a second parameter always. Whatever route we want to protect, just add "auth" as a second parameter.
 router.delete("/experience/:exp_id", auth, async (req, res) => {
   try {
@@ -241,16 +241,16 @@ router.delete("/experience/:exp_id", auth, async (req, res) => {
     profile.experience.splice(removeIndex, 1); //Take out the desired experience to be removed.
 
     await profile.save(); // Save profile.
-    res.json(profile); // Send back profile in response.
+    res.json(profile); // Send back profile in HTTP response.
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
   }
 });
 
-// @route PUT api/profile/education
-// @desc Add Profile education
-// @access Private
+// @route  PUT api/profile/education
+// @desc   Add Profile education
+// @access Private (User has to be logged in)
 // Middleware is being added as a second parameter always. Because validation and auth middleware must be used together, pass this as an array.
 router.put(
   "/education",
@@ -299,7 +299,7 @@ router.put(
       profile.education.unshift(newEdu); // "unshift()" works like "push()", just it pushes the element to the beginning on an array.
 
       await profile.save(); // Save profile.
-      res.json(profile); // Send back profile in response.
+      res.json(profile); // Send back profile in HTTP response.
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
@@ -307,9 +307,9 @@ router.put(
   }
 );
 
-// @route DELETE api/profile/education/:exp_id ":exp_id" is a placeholder
-// @desc Delete education from Profile
-// @access Private
+// @route  DELETE api/profile/education/:exp_id ":exp_id" is a placeholder
+// @desc   Delete education from Profile
+// @access Private (User has to be logged in)
 // Middleware is being added as a second parameter always. Whatever route we want to protect, just add "auth" as a second parameter.
 router.delete("/education/:exp_id", auth, async (req, res) => {
   try {
@@ -323,16 +323,16 @@ router.delete("/education/:exp_id", auth, async (req, res) => {
     profile.education.splice(removeIndex, 1); //Take out the desired education to be removed.
 
     await profile.save(); // Save profile.
-    res.json(profile); // Send back profile in response.
+    res.json(profile); // Send back profile in HTTP response.
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
   }
 });
 
-// @route GET api/profile/github/:username ":username" is a placeholder
-// @desc Get user repositories from GitHub
-// @access Public
+// @route  GET api/profile/github/:username ":username" is a placeholder
+// @desc   Get user repositories from GitHub
+// @access Public (User doesn't has to be logged in)
 router.get("/github/:username", (req, res) => {
   try {
     // Set options for fetching user's GitHub repositories.

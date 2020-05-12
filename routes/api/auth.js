@@ -10,11 +10,11 @@ const User = require("../../models/User");
 
 // @route   GET api/auth
 // @desc    Test route
-// @access  Public
+// @access  Public (User doesn't has to be logged in)
 // Middleware is being added as second parameter always. Whatever route we want to protect, just add "auth" as a second parameter.
 router.get("/", auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password"); // We can access it here (in protected route), because the middleware does the job for us to make it accessible. "-password" means don't return (hashed) password.
+    const user = await User.findById(req.user.id).select("-password"); // We can access it here (in protected route), because the middleware does the job for us to make it accessible. "-password" means don't return/send back (hashed) password.
     res.json(user); // Send a user in HTTP response.
   } catch (err) {
     console.error(err.message);
@@ -24,7 +24,7 @@ router.get("/", auth, async (req, res) => {
 
 // @route   POST api/auth
 // @desc    Authenticate user and get token
-// @access  Public
+// @access  Public (User doesn't has to be logged in)
 router.post(
   "/",
   [

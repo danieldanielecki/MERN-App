@@ -21,7 +21,7 @@ router.get("/me", auth, async (req, res) => {
 
     // Check if there is no profile.
     if (!profile) {
-      return res.status(400).json({ msg: "There is no profile for this user" });
+      return res.status(400).json({ msg: "There is no profile for this user" }); // 400 = Bad Request Error.
     }
 
     res.json(profile); // Send back profile in HTTP response.
@@ -49,7 +49,7 @@ router.post(
 
     // Check for errors.
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() }); // Error occured, therefore display the error.
+      return res.status(400).json({ errors: errors.array() }); // Error occured (400 = Bad Request Error), therefore display the error.
     }
 
     const {
@@ -142,8 +142,9 @@ router.get("/user/:user_id", async (req, res) => {
   } catch (err) {
     console.error(err.message);
 
+    // Check if the error is a valid object ID to display the same error message for URL's with valid and invalid object ID.
     if (err.kind === "ObjectId") {
-      return res.status(400).json({ msg: "Profile not found" });
+      return res.status(400).json({ msg: "Profile not found" }); // 400 = Bad Request Error.
     }
 
     res.status(500).send("Server Error"); // General purpose server error, never disclose any sensitive information here.
@@ -186,7 +187,7 @@ router.put(
 
     // Check for errors.
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() }); // Error occured, therefore display the error.
+      return res.status(400).json({ errors: errors.array() }); // Error occured (400 = Bad Request Error), therefore display the error.
     }
 
     // Pull that details out from "req.body".
@@ -268,7 +269,7 @@ router.put(
 
     // Check for errors.
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() }); // Error occured, therefore display the error.
+      return res.status(400).json({ errors: errors.array() }); // Error occured (400 = Bad Request Error), therefore display the error.
     }
 
     // Pull that details out from "req.body".

@@ -26,7 +26,7 @@ router.post(
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ errors: errors.array() }); // 400 = Bad Request Error.
     }
 
     const { name, email, password } = req.body; // Extract needed data from the HTTP request.
@@ -37,7 +37,7 @@ router.post(
       // See if user exists.
       if (user) {
         return res
-          .status(400)
+          .status(400) // 400 = Bad Request Error.
           .json({ errors: [{ msg: "User already exists" }] });
       }
 

@@ -35,7 +35,7 @@ router.post(
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ errors: errors.array() }); // 400 = Bad Request Error.
     }
 
     const { email, password } = req.body; // Extract needed data from the HTTP request.
@@ -46,7 +46,7 @@ router.post(
       // See if user exists.
       if (!user) {
         return res
-          .status(400)
+          .status(400) // 400 = Bad Request Error.
           .json({ errors: [{ msg: "Invalid credentials" }] }); // For security reasons keep this message same as for a case when password doesn't match.
       }
 
@@ -56,7 +56,7 @@ router.post(
       // See if passwords matches.
       if (!isMatch) {
         return res
-          .status(400)
+          .status(400) // 400 = Bad Request Error.
           .json({ errors: [{ msg: "Invalid credentials" }] }); // For security reasons keep this message same as for a case when user doesn't exists.
       }
 

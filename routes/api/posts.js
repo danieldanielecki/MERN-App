@@ -23,17 +23,17 @@ router.post(
     }
 
     try {
-      const user = await User.findById(req.user.id).select("-password"); // We can access it here (in protected route), because the middleware does the job for us to make it accessible. "-password" means don't return/send back (hashed) password.
+      const user = await User.findById(req.user.id).select("-password"); // We can access it here (in protected route), because the middleware does the job for us to make it accessible. "-password" means don't return/send back (hashed) password. "req.user.id" matches the user which is logged in.
 
       // Text comes from the body, but the rest from the user.
       const newPost = new Post({
         text: req.body.text,
         name: user.name,
         avatar: user.avatar,
-        user: req.user.id,
+        user: req.user.id, // "req.user.id" matches the user which is logged in.
       });
 
-      const post = await newPost.save(); // Save the new post to the variable.
+      const post = await newPost.save(); // Save the new post to database and to the variable, it returns a Promise..
       res.json(post); // Send back post in HTTP response.
     } catch (err) {
       console.error(err.message);
@@ -62,7 +62,7 @@ router.get("/", auth, async (req, res) => {
 // Middleware is being added as a second parameter always. Whatever route we want to protect, just add "auth" as a second parameter.
 router.get("/:id", auth, async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id); // Find post by ID.
+    const post = await Post.findById(req.params.id); // Find post by ID (fetched from URL).
 
     // Check if there is no post.
     if (!post) {
@@ -82,20 +82,20 @@ router.get("/:id", auth, async (req, res) => {
   }
 });
 
-// @route   DELETE api/post/:id ":id" is a placeholder
+// @route   DELETE api/posts/:id ":id" is a placeholder
 // @desc    Delete a post
 // @access  Private (User has to be logged in)
 // Middleware is being added as a second parameter always. Whatever route we want to protect, just add "auth" as a second parameter.
 router.delete("/:id", auth, async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id); // Find post by ID.
+    const post = await Post.findById(req.params.id); // Find post by ID (fetched from URL).
 
     // Check if there is no post.
     if (!post) {
       return res.status(404).json({ msg: "Post not found" }); // 404 = Not Found.
     }
 
-    // Check if the user which deletes post is not the owner of the post.
+    // Check if the user which deletes post is not the owner of the post. "req.user.id" matches the user which is logged in.
     if (post.user.toString() !== req.user.id) {
       return res.status(401).json({ msg: "User not authorized" }); // 401 = Not Authorized.
     }
@@ -109,6 +109,65 @@ router.delete("/:id", auth, async (req, res) => {
       return res.status(404).json({ msg: "Post not found" }); // 404 = Not Found.
     }
 
+    console.error(err.message);
+    res.status(500).send("Server error"); // General purpose server error, never disclose any sensitive information here.
+  }
+});
+
+// @route   PUT api/posts/like/:id ":id" is a placeholder
+// @desc    Like a post
+// @access  Private (User has to be logged in)
+// Middleware is being added as a second parameter always. Whatever route we want to protect, just add "auth" as a second parameter.
+router.put("/like/:id", auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id); // Find post by ID (fetched from URL).
+
+    // Check if the post has already been liked. "req.user.id" matches the user which is logged in.
+    if (
+      post.likes.filter((like) => like.user.toString() === req.user.id).length >
+      0
+    ) {
+      return res.status(400).json({ msg: "Post already liked" }); // 400 = Bad Request Error.
+    }
+
+    post.likes.unshift({ user: req.user.id }); // "unshift()" works like "push()", just it pushes the element to the beginning on an array. "req.user.id" matches the user which is logged in.
+
+    await post.save(); // Save the post to the database, it returns a Promise.
+
+    res.json(post.likes); // Send back likes in HTTP response due to React/Redux.
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error"); // General purpose server error, never disclose any sensitive information here.
+  }
+});
+
+// @route   PUT api/posts/unlike/:id ":id" is a placeholder
+// @desc    Remove a like
+// @access  Private (User has to be logged in)
+// Middleware is being added as a second parameter always. Whatever route we want to protect, just add "auth" as a second parameter.
+router.put("/unlike/:id", auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id); // Find post by ID (fetched from URL).
+
+    // Check if the post has already been liked. "req.user.id" matches the user which is logged in.
+    if (
+      post.likes.filter((like) => like.user.toString() === req.user.id)
+        .length === 0
+    ) {
+      return res.status(400).json({ msg: "Post has not yet been liked" }); // 400 = Bad Request Error.
+    }
+
+    // Get like to be removed by index.
+    const removeIndex = post.likes
+      .map((like) => like.user.toString())
+      .indexOf(req.user.id); // Find like by ID (fetched from URL).
+
+    post.likes.splice(removeIndex, 1); // Take out the desired like to be removed.
+
+    await post.save(); // Save the post to the database, it returns a Promise.
+
+    res.json(post.likes); // Send back likes in HTTP response due to React/Redux.
+  } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error"); // General purpose server error, never disclose any sensitive information here.
   }

@@ -8,7 +8,17 @@
     "start": "node server"
   },
   "keywords": [
-    "mern"
+    "express",
+    "express.js",
+    "expressjs",
+    "mern",
+    "mongo",
+    "mongodb",
+    "node",
+    "node.js",
+    "nodejs",
+    "react",
+    "redux"
   ],
   "author": "Daniel Danielecki",
   "license": "ISC",

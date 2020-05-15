@@ -60,7 +60,7 @@ router.post(
       const salt = await bcrypt.genSalt(10); // Password hashing settings aka. "salt", use recommended 10 rounds, it returns a Promise.
       user.password = await bcrypt.hash(password, salt); // Hash password.
 
-      await user.save(); // Save user to the database, it returns a Promise.
+      await user.save(); // Save the user to the database, it returns a Promise.
 
       // Get payload in a form of JSON Web Token (JWT) which includes the user ID in order to be logged in right away after registration.
       const payload = {

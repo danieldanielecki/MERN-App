@@ -14,7 +14,7 @@ const User = require("../../models/User");
 // Middleware is being added as second parameter always. Whatever route we want to protect, just add "auth" as a second parameter.
 router.get("/", auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password"); // We can access it here (in protected route), because the middleware does the job for us to make it accessible. "-password" means don't return/send back (hashed) password.
+    const user = await User.findById(req.user.id).select("-password"); // We can access it here (in protected route), because the middleware does the job for us to make it accessible. "-password" means don't return/send back (hashed) password. "req.user.id" matches the user which is logged in.
     res.json(user); // Send a user in HTTP response.
   } catch (err) {
     console.error(err.message);

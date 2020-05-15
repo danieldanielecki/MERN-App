@@ -16,7 +16,7 @@ const User = require("../../models/User");
 router.get("/me", auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({
-      user: req.user.id, // Equivalent to "mongoose.Schema.Types.ObjectId" in Profile model. Get user by ID from the token.
+      user: req.user.id, // Equivalent to "mongoose.Schema.Types.ObjectId" in Profile model. Get user by ID from the token. "req.user.id" matches the user which is logged in.
     }).populate("user", ["name", "avatar"]); // Populate name and avatar from User model.
 
     // Check if there is no profile.
@@ -69,7 +69,7 @@ router.post(
 
     /* Build profile object. */
     const profileFields = {};
-    profileFields.user = req.user.id; // Get user by ID from the token.
+    profileFields.user = req.user.id; // Get user by ID from the token. "req.user.id" matches the user which is logged in.
     if (company) profileFields.company = company;
     if (website) profileFields.website = website;
     if (location) profileFields.location = location;
@@ -88,13 +88,13 @@ router.post(
     if (instagram) profileFields.social.instagram = instagram;
 
     try {
-      let profile = await Profile.findOne({ user: req.user.id }); // Get user by ID from the token.
+      let profile = await Profile.findOne({ user: req.user.id }); // Get user by ID from the token. "req.user.id" matches the user which is logged in.
 
       // Check if profile exists.
       if (profile) {
         // Update the profile.
         profile = await Profile.findOneAndUpdate(
-          { user: req.user.id }, // Get user by ID from the token.
+          { user: req.user.id }, // Get user by ID from the token. "req.user.id" matches the user which is logged in.
           { $set: profileFields },
           { new: true }
         );
@@ -104,7 +104,7 @@ router.post(
 
       profile = new Profile(profileFields); // Create profile.
 
-      await profile.save(); // Save profile.
+      await profile.save(); // Save the profile to the database, it returns a Promise..
       res.json(profile); // Send back profile in HTTP response.
     } catch (err) {
       console.error(err.message);
@@ -132,7 +132,7 @@ router.get("/", async (req, res) => {
 router.get("/user/:user_id", async (req, res) => {
   try {
     const profile = await Profile.findOne({
-      user: req.params.user_id,
+      user: req.params.user_id, // Find user by ID (fetched from URL).
     }).populate("user", ["name", "avatar"]); // Populate name and avatar from User model.
 
     // Check if there is no profile for this "user_id".
@@ -158,8 +158,8 @@ router.get("/user/:user_id", async (req, res) => {
 router.delete("/", auth, async (req, res) => {
   try {
     // @todo - remove users posts
-    await Profile.findOneAndRemove({ user: req.user.id }); // Remove Profile by ID based on the token.
-    await User.findOneAndRemove({ _id: req.user.id }); // Remove User by ID based on the token.
+    await Profile.findOneAndRemove({ user: req.user.id }); // Remove Profile by ID based on the token. "req.user.id" matches the user which is logged in.
+    await User.findOneAndRemove({ _id: req.user.id }); // Remove User by ID based on the token. "req.user.id" matches the user which is logged in.
 
     res.json({ msg: "User deleted" }); // Send back message in HTTP response.
   } catch (err) {
@@ -213,11 +213,11 @@ router.put(
     };
 
     try {
-      const profile = await Profile.findOne({ user: req.user.id }); // Get user by ID from the token.
+      const profile = await Profile.findOne({ user: req.user.id }); // Get user by ID from the token. "req.user.id" matches the user which is logged in.
 
       profile.experience.unshift(newExp); // "unshift()" works like "push()", just it pushes the element to the beginning on an array.
 
-      await profile.save(); // Save profile.
+      await profile.save(); // Save the profile to the database, it returns a Promise..
       res.json(profile); // Send back profile in HTTP response.
     } catch (err) {
       console.error(err.message);
@@ -232,16 +232,16 @@ router.put(
 // Middleware is being added as a second parameter always. Whatever route we want to protect, just add "auth" as a second parameter.
 router.delete("/experience/:exp_id", auth, async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.user.id }); // Get user by ID from the token.
+    const profile = await Profile.findOne({ user: req.user.id }); // Get user by ID from the token. "req.user.id" matches the user which is logged in.
 
     // Get experience to be removed by index.
     const removeIndex = profile.experience
       .map((item) => item.id)
-      .indexOf(req.params.exp_id);
+      .indexOf(req.params.exp_id); // Find experience by ID (fetched from URL).
 
-    profile.experience.splice(removeIndex, 1); //Take out the desired experience to be removed.
+    profile.experience.splice(removeIndex, 1); // Take out the desired experience to be removed.
 
-    await profile.save(); // Save profile.
+    await profile.save(); // Save the profile to the database, it returns a Promise..
     res.json(profile); // Send back profile in HTTP response.
   } catch (err) {
     console.error(err.message);
@@ -299,7 +299,7 @@ router.put(
 
       profile.education.unshift(newEdu); // "unshift()" works like "push()", just it pushes the element to the beginning on an array.
 
-      await profile.save(); // Save profile.
+      await profile.save(); // Save the profile to the database, it returns a Promise..
       res.json(profile); // Send back profile in HTTP response.
     } catch (err) {
       console.error(err.message);
@@ -314,16 +314,16 @@ router.put(
 // Middleware is being added as a second parameter always. Whatever route we want to protect, just add "auth" as a second parameter.
 router.delete("/education/:exp_id", auth, async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.user.id }); // Get user by ID from the token.
+    const profile = await Profile.findOne({ user: req.user.id }); // Get user by ID from the token. "req.user.id" matches the user which is logged in.
 
     // Get education to be removed by index.
     const removeIndex = profile.education
       .map((item) => item.id)
-      .indexOf(req.params.exp_id);
+      .indexOf(req.params.exp_id); // Find experience by ID (fetched from URL).
 
     profile.education.splice(removeIndex, 1); //Take out the desired education to be removed.
 
-    await profile.save(); // Save profile.
+    await profile.save(); // Save the profile to the database, it returns a Promise..
     res.json(profile); // Send back profile in HTTP response.
   } catch (err) {
     console.error(err.message);
@@ -341,7 +341,7 @@ router.get("/github/:username", (req, res) => {
       headers: { "user-agent": "node.js" },
       method: "GET",
       uri: `https://api.github.com/users/${
-        req.params.username
+        req.params.username // Find username by ID (fetched from URL).
       }/repos?per_page=5&sort=created:asc&client_id=${config.get(
         "githubClientId"
       )}&client_secret=${config.get("githubSecret")}`,

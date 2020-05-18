@@ -104,7 +104,7 @@ router.post(
 
       profile = new Profile(profileFields); // Create profile.
 
-      await profile.save(); // Save the profile to the database, it returns a Promise..
+      await profile.save(); // Save the profile to the database, it returns a Promise.
       res.json(profile); // Send back profile in HTTP response.
     } catch (err) {
       console.error(err.message);
@@ -217,7 +217,7 @@ router.put(
 
       profile.experience.unshift(newExp); // "unshift()" works like "push()", just it pushes the element to the beginning on an array.
 
-      await profile.save(); // Save the profile to the database, it returns a Promise..
+      await profile.save(); // Save the profile to the database, it returns a Promise.
       res.json(profile); // Send back profile in HTTP response.
     } catch (err) {
       console.error(err.message);
@@ -241,7 +241,7 @@ router.delete("/experience/:exp_id", auth, async (req, res) => {
 
     profile.experience.splice(removeIndex, 1); // Take out the desired experience to be removed.
 
-    await profile.save(); // Save the profile to the database, it returns a Promise..
+    await profile.save(); // Save the profile to the database, it returns a Promise.
     res.json(profile); // Send back profile in HTTP response.
   } catch (err) {
     console.error(err.message);
@@ -299,7 +299,7 @@ router.put(
 
       profile.education.unshift(newEdu); // "unshift()" works like "push()", just it pushes the element to the beginning on an array.
 
-      await profile.save(); // Save the profile to the database, it returns a Promise..
+      await profile.save(); // Save the profile to the database, it returns a Promise.
       res.json(profile); // Send back profile in HTTP response.
     } catch (err) {
       console.error(err.message);
@@ -323,7 +323,7 @@ router.delete("/education/:exp_id", auth, async (req, res) => {
 
     profile.education.splice(removeIndex, 1); //Take out the desired education to be removed.
 
-    await profile.save(); // Save the profile to the database, it returns a Promise..
+    await profile.save(); // Save the profile to the database, it returns a Promise.
     res.json(profile); // Send back profile in HTTP response.
   } catch (err) {
     console.error(err.message);

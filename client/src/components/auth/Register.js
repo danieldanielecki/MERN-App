@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { Fragment, useState } from "react";
 
 const Register = () => {
@@ -18,14 +19,34 @@ const Register = () => {
       [e.target.name]: e.target.value, // Change the default value with written in in the form value.
     });
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     // Check if passwords don't match.
     if (password !== password2) {
       console.log("Passwords do not match"); // Passwords don't match, therefore for now console log this information.
     } else {
-      console.log(formData); // Passwords do match, therefore for now console log this information.
+      const newUser = {
+        name,
+        email,
+        password,
+      };
+
+      try {
+        // HTTP Headers.
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+
+        const body = JSON.stringify(newUser); // Prepare the body to be send out.
+        const res = await axios.post("/api/users/", body, config); // Axios returns a Promise, "res" stands for Response. Relative URL is enough, "localhost:PORT_NUMBER" is not required, because we have a proxy in "package.json."
+
+        console.log(res.data);
+      } catch (err) {
+        console.error(err.response.data);
+      }
     }
   };
 

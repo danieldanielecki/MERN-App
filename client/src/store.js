@@ -1,4 +1,4 @@
-import rootReducer from "./reducers"; // The "index.js" will be taken automatically from this folder.
+import rootReducer from "./reducers"; // The "index.js" will be taken automatically from this folder, because this is a root reducer.
 import thunk from "redux-thunk";
 import { applyMiddleware, createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";

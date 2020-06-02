@@ -1,7 +1,10 @@
+import { connect } from "react-redux";
+import { setAlert } from "../../actions/alert";
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const Register = () => {
+const Register = ({ setAlert }) => {
   // Hooks, pull out state "formData" and use "setFormData" function to update the state from "useState" hook.
   const [formData, setFormData] = useState({
     // Set initial state values.
@@ -24,9 +27,9 @@ const Register = () => {
 
     // Check if passwords don't match.
     if (password !== password2) {
-      console.log("Passwords do not match"); // Passwords don't match, therefore for now console log this information.
+      setAlert("Passwords do not match", "danger"); // Passwords don't match, therefore for now console log this information.
     } else {
-      console.log("Success"); // Passwords do match, therefore for now console log this information.
+      setAlert("Success"); // Passwords do match, therefore for now console log this information.
     }
   };
 
@@ -90,4 +93,9 @@ const Register = () => {
   );
 };
 
-export default Register;
+// Make sure "setAlert" is required.
+Register.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+};
+
+export default connect(null, { setAlert })(Register); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. The second is an object with any Actions we wanna use. "setAlert" allows us to access "props.setAlert" or simply "setAlert" nested into an object how it's done here. Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use connect.

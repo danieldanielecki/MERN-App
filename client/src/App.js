@@ -1,4 +1,5 @@
 import store from "./store";
+import Alert from "./components/layout/Alert";
 import Landing from "./components/layout/Landing";
 import Login from "./components/auth/Login";
 import Navbar from "./components/layout/Navbar";
@@ -16,6 +17,7 @@ const App = () => (
         <Navbar />
         <Route component={Landing} exact path="/" />
         <section className="container">
+          <Alert />
           <Switch>
             <Route component={Register} exact path="/register" />
             <Route component={Login} exact path="/login" />

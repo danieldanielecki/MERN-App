@@ -1,10 +1,11 @@
 import { connect } from "react-redux";
+import { register } from "../../actions/auth";
 import { setAlert } from "../../actions/alert";
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const Register = ({ setAlert }) => {
+const Register = ({ setAlert, register }) => {
   // Hooks, pull out state "formData" and use "setFormData" function to update the state from "useState" hook.
   const [formData, setFormData] = useState({
     // Set initial state values.
@@ -29,7 +30,7 @@ const Register = ({ setAlert }) => {
     if (password !== password2) {
       setAlert("Passwords do not match", "danger"); // Passwords don't match, therefore for now console log this information.
     } else {
-      setAlert("Success"); // Passwords do match, therefore for now console log this information.
+      register({ name, email, password }); // Passwords do match, therefore pass into "register" action name, email and password.
     }
   };
 
@@ -96,6 +97,7 @@ const Register = ({ setAlert }) => {
 // Make sure "setAlert" is required.
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
 };
 
-export default connect(null, { setAlert })(Register); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. The second is an object with any Actions we wanna use. "setAlert" allows us to access "props.setAlert" or simply "setAlert" nested into an object how it's done here. Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use connect.
+export default connect(null, { setAlert, register })(Register); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. The second is an object with any Actions we wanna use. "setAlert" allows us to access "props.setAlert" or simply "setAlert" nested into an object how it's done here. Same logic related to "props" applies to "register". Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use connect.

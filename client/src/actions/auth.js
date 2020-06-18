@@ -1,10 +1,36 @@
 import axios from "axios";
+import setAuthToken from "./../utils/setAuthToken";
 import { setAlert } from "./alert";
-import { REGISTER_SUCCESS, REGISTER_FAIL } from "./types";
+import { AUTH_ERROR, REGISTER_FAIL, REGISTER_SUCCESS, USER_LOADED } from "./types";
 
-// TODO: place this description somewhere. Using JSON Web Token (JWT) is a stateless form of authentication. So actually we have to keep querying the server and see if the token on frontend matches that one on the backend. It'll be done int action "api/auth" route.
+// TODO: place this description somewhere. Using JSON Web Token (JWT) is a stateless (which means the data doesn't stay, we need to keep making a request to the backend) form of authentication. So actually we have to keep querying the server and see if the token on frontend matches that one on the backend. It'll be done int action "api/auth" route.
+
+
+// Load User.
+// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point it "()" then "=>", "(dispatch)" and "=>" again to do so.
+export const loadUser = () => async (dispatch) => {
+  // Check if there is a token and if it is then put this into a global header. Here it'll check only for the first time when the user loads.
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
+  }
+
+  // Token is there, then make a request.
+  try {
+    const res = await axios.get('/api/auth'); // Make request to "/api/auth" backend route.
+
+    dispatch({
+      type: USER_LOADED, // If request was successful, dispatch "USER_LOADED".
+      payload: res.data // Payload will be the user's data.
+    })
+  } catch (err) {
+    dispatch({
+      type: AUTH_ERROR // If request was not successful, dispatch "AUTH_ERROR".
+    })
+  }
+}
+
 // Register User action.
-// Dispatch more than 1 action type from this function.We're able to do it because of the "thunk" middleware, the crucial point it "({ name, email, password })" parameters then "=>", "(dispatch)" and "=>" again to do so.
+// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point it "({ name, email, password })" parameters then "=>", "(dispatch)" and "=>" again to do so.
 export const register = ({ name, email, password }) => async (dispatch) => {
   // Create config object with HTTP headers.
   const config = {

@@ -2,10 +2,11 @@ import { connect } from "react-redux";
 import { register } from "../../actions/auth";
 import { setAlert } from "../../actions/alert";
 import React, { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const Register = ({ setAlert, register }) => {
+// Pull out these values, so every time we access the property we don't have to do "props.setAlert". Same logic applies for "register" and "isAuthenticated".
+const Register = ({ setAlert, register, isAuthenticated }) => {
   // Hooks, pull out state "formData" and use "setFormData" function to update the state from "useState" hook.
   const [formData, setFormData] = useState({
     // Set initial state values.
@@ -33,6 +34,11 @@ const Register = ({ setAlert, register }) => {
       register({ name, email, password }); // Passwords do match, therefore pass into "register" action name, email and password.
     }
   };
+
+  // Redirect if user registered.
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
 
   return (
     <Fragment>
@@ -94,10 +100,15 @@ const Register = ({ setAlert, register }) => {
   );
 };
 
-// Make sure "setAlert" is required.
+// Make sure "setAlert" and "register" props are required and "isAuthenticated" is set to "bool".
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
 };
 
-export default connect(null, { setAlert, register })(Register); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. The second is an object with any Actions we wanna use. "setAlert" allows us to access "props.setAlert" or simply "setAlert" nested into an object how it's done here. Same logic related to "props" applies to "register". Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use connect.
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated, // Whatever State we want or whatever Prop we wanna call it, here it's "isAuthenticated". "isAuthenticated" comes from the root reducer, accesing this via "state.auth.isAuthenticated" to get the state inside "auth.isAuthenticated". So "props.auth.isAuthenticated" is becoming available for us, or simply "auth.isAuthenticated"  nested into an object how it's done here.
+});
+
+export default connect(mapStateToProps, { setAlert, register })(Register); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. The second is an object with any Actions we wanna use. "setAlert" allows us to access "props.setAlert" or simply "setAlert" nested into an object how it's done here. Same logic related to "props" applies to "register". Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use connect.

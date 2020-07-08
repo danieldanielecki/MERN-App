@@ -1,4 +1,11 @@
-import { AUTH_ERROR, REGISTER_FAIL, REGISTER_SUCCESS, USER_LOADED } from "../actions/types";
+import {
+  AUTH_ERROR,
+  LOGIN_FAIL,
+  LOGIN_SUCCESS,
+  REGISTER_FAIL,
+  REGISTER_SUCCESS,
+  USER_LOADED,
+} from "../actions/types";
 
 // Initial state data.
 const initialState = {
@@ -18,8 +25,10 @@ export default function (state = initialState, action) {
         ...state,
         isAuthenticated: true,
         loading: false,
-        user: payload // Set "user" to the "payload", which includes all user data such as name, email, avatar etc. excluding password, because in the backend ".select('-password')" makes it to exclude password.
-      }
+        user: payload, // Set "user" to the "payload", which includes all user data such as name, email, avatar etc. excluding password, because in the backend ".select('-password')" makes it to exclude password.
+      };
+    // These cases have exactly the same logic, therefore it can be used with simplified "case" statement.
+    case LOGIN_SUCCESS:
     case REGISTER_SUCCESS:
       localStorage.setItem("token", payload.token); // Set token.
 
@@ -30,6 +39,8 @@ export default function (state = initialState, action) {
         isAuthenticated: true,
         loading: false,
       };
+    // These cases have exactly the same logic, therefore it can be used with simplified "case" statement.
+    case LOGIN_FAIL:
     case REGISTER_FAIL:
     case AUTH_ERROR:
       localStorage.removeItem("token"); // If the registration failed or authentication error occured then remove the token completely from localStorage.

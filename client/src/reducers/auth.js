@@ -2,6 +2,7 @@ import {
   AUTH_ERROR,
   LOGIN_FAIL,
   LOGIN_SUCCESS,
+  LOGOUT,
   REGISTER_FAIL,
   REGISTER_SUCCESS,
   USER_LOADED,
@@ -41,6 +42,7 @@ export default function (state = initialState, action) {
       };
     // These cases have exactly the same logic, therefore it can be used with simplified "case" statement.
     case LOGIN_FAIL:
+    case LOGOUT:
     case REGISTER_FAIL:
     case AUTH_ERROR:
       localStorage.removeItem("token"); // If the registration failed or authentication error occured then remove the token completely from localStorage.

@@ -5,6 +5,7 @@ import {
   AUTH_ERROR,
   LOGIN_FAIL,
   LOGIN_SUCCESS,
+  LOGOUT,
   REGISTER_FAIL,
   REGISTER_SUCCESS,
   USER_LOADED,
@@ -109,3 +110,8 @@ export const login = (email, password) => async (dispatch) => {
     });
   }
 };
+
+// Logout / Clear Profile action.
+export const logout = () => dispatch => {
+  dispatch({ type: LOGOUT })
+}

@@ -1,9 +1,11 @@
 import setAuthToken from "./utils/setAuthToken";
 import store from "./store";
 import Alert from "./components/layout/Alert";
+import Dashboard from "./components/dashboard/Dashboard";
 import Landing from "./components/layout/Landing";
 import Login from "./components/auth/Login";
 import Navbar from "./components/layout/Navbar";
+import PrivateRoute from "./components/routing/PrivateRoute";
 import Register from "./components/auth/Register";
 import React, { Fragment, useEffect } from "react";
 import { loadUser } from "./actions/auth";
@@ -34,11 +36,14 @@ const App = () => {
             <Switch>
               <Route component={Register} exact path="/register" />
               <Route component={Login} exact path="/login" />
+              {/* Make the 'dashboard' route protected. */}
+              <PrivateRoute component={Dashboard} exact path="/dashboard" />
             </Switch>
           </section>
         </Fragment>
       </Router>
     </Provider>
-)};
+  );
+};
 
 export default App;

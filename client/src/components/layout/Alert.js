@@ -18,7 +18,7 @@ Alert.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  alerts: state.alert, // Whatever State we want or whatever Prop we wanna call it, here it's "alerts". "alert" comes from the root reducer, accesing this via "state.alert" to get the state inside "alert". So "props.alerts" is becoming available for us, or simply "alerts"  nested into an object how it's done here.
+  alerts: state.alert, // Whatever State we want or whatever Prop we wanna call it, here it's "alerts". "alert" comes from the root reducer, accesing this via "state.alert" to get the state inside "alert". So "props.alerts" is becoming available for us, or simply "alerts" nested into an object how it's done here.
 });
 
-export default connect(mapStateToProps)(Alert); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. There is no second parameter, because there is not Action. Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use connect.
+export default connect(mapStateToProps)(Alert); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. There is no second parameter, because there is no Action. Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use connect.

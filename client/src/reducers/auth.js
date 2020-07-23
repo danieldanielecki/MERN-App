@@ -12,10 +12,11 @@ import {
 const initialState = {
   token: localStorage.getItem("token"), // Fetch token.
   isAuthenticated: null, // Before any request will be performed set "isAuthenticated" to "null". After successful authentication this will be set to "true" and the user will see dashboard, navbar etc. (whatever should be displayed after successful authentication).
-  loading: true, // Before any request will be performed set "loading" to "true". Once this will be set to "true
+  loading: true, // Before any request will be performed set "loading" to "true". Once we make (finish) a request it will be set to "false".
   user: null, // Before any request will be performed set "user" to "null". After making a request to "api/auth" and we get the user data it will added here.
 };
 
+// Every reducer takes "state" by default being the "initialState" and an "action".
 export default function (state = initialState, action) {
   const { type, payload } = action; // Pull out these valeus from the action, so every time we access the property we don't have to do "action.type" etc.
 
@@ -54,6 +55,6 @@ export default function (state = initialState, action) {
         loading: false,
       };
     default:
-      return state; // By default return state.
+      return state; // Every reducer we create will have a default case with returning a state.
   }
 }

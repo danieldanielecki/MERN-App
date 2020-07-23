@@ -2,6 +2,7 @@ import { SET_ALERT, REMOVE_ALERT } from "../actions/types";
 
 const initialState = []; // Initial state is just an empty array.
 
+// Every reducer takes "state" by default being the "initialState" and an "action".
 export default function (state = initialState, action) {
   const { type, payload } = action; // Pull out these valeus from the action, so every time we access the property we don't have to do "action.type" etc.
 

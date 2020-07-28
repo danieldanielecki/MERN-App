@@ -3,8 +3,7 @@ import { Redirect, Route } from "react-router-dom";
 import React from "react";
 import PropTypes from "prop-types";
 
-// Pull out these values, so every time we access the property we don't have to do "props.auth". Same logic applies for "component" and anything else that is passed in ("...rest").
-// Pull out "auth", so every time we access the property we don't have to do "props.auth". Instead, simply "auth". In addition to that, from "auth" pull out "isAuthenticated" and "loading". Same logic applies for "logout".
+// Pull out these values, so every time we access the property we don't have to do, for example, "props.component", instead simply "component". Same logic applies for "auth" and anything else that is passed in ("...rest"). In addition to that, from "auth" pull out "isAuthenticated" and "loading".
 const PrivateRoute = ({
   component: Component,
   auth: { isAuthenticated, loading },

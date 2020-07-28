@@ -1,3 +1,8 @@
+import "./App.css";
+import { loadUser } from "./actions/auth";
+import React, { useEffect, Fragment } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Provider } from "react-redux";
 import setAuthToken from "./utils/setAuthToken";
 import store from "./store";
 import Alert from "./components/layout/Alert";
@@ -7,11 +12,6 @@ import Login from "./components/auth/Login";
 import Navbar from "./components/layout/Navbar";
 import PrivateRoute from "./components/routing/PrivateRoute";
 import Register from "./components/auth/Register";
-import React, { Fragment, useEffect } from "react";
-import { loadUser } from "./actions/auth";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Provider } from "react-redux";
-import "./App.css";
 
 // Check if there is a token and if it is then put this into a global header.
 if (localStorage.token) {

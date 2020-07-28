@@ -1,4 +1,4 @@
-import { GET_PROFILE, PROFILE_ERROR } from "../actions/types";
+import { CLEAR_PROFILE, GET_PROFILE, PROFILE_ERROR } from "../actions/types";
 
 // Initial state data.
 const initialState = {
@@ -26,6 +26,14 @@ export default function (state = initialState, action) {
       return {
         ...state,
         error: payload,
+        loading: false,
+      };
+    case CLEAR_PROFILE:
+      // State is immutable, therefore when adding another one it'll be an array. That's why we need to use spread operator to return all of them. On top of this, to fully clear profile, set "profile" to "null", repost to empty array and "loading" to "false".
+      return {
+        ...state,
+        profile: null,
+        repos: [],
         loading: false,
       };
     default:

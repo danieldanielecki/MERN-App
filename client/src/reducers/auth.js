@@ -47,7 +47,7 @@ export default function (state = initialState, action) {
     case REGISTER_FAIL:
     case AUTH_ERROR:
       localStorage.removeItem("token"); // If the registration failed or authentication error occured then remove the token completely from localStorage.
-      // State is immutable, therefore when adding another one it'll be an array. That's why we need to use spread operator to return all of them. On top of this, return an appropriate booleans for a case when user's registered has failed or authentication error occured.
+      // State is immutable, therefore when adding another one it'll be an array. That's why we need to use spread operator to return all of them. On top of this, set "token" to "null" and return an appropriate booleans for a case when user's registered has failed or authentication error occured.
       return {
         ...state,
         token: null,

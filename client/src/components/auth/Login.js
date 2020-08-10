@@ -13,12 +13,12 @@ const Login = ({ login, isAuthenticated }) => {
     password: "",
   });
 
-  const { email, password } = formData; // Pull out these values from form data, so every time we access the property we don't have to do "formData.email" etc.
+  const { email, password } = formData; // Pull out these values from form data, so every time we access the property we don't have to do "formData.company", instead just "company", etc.
 
   const onChange = (e) =>
     setFormData({
       ...formData, // Make a copy of "formData".
-      [e.target.name]: e.target.value, // Change the default value with written in in the form value.
+      [e.target.name]: e.target.value, // Change the default value with written in the form value.
     });
 
   const onSubmit = (e) => {

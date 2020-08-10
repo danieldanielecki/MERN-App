@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import setAuthToken from "./utils/setAuthToken";
 import store from "./store";
 import Alert from "./components/layout/Alert";
+import CreateProfile from "./components/profile-form/CreateProfile";
 import Dashboard from "./components/dashboard/Dashboard";
 import Landing from "./components/layout/Landing";
 import Login from "./components/auth/Login";
@@ -36,8 +37,13 @@ const App = () => {
             <Switch>
               <Route component={Register} exact path="/register" />
               <Route component={Login} exact path="/login" />
-              {/* Make the 'dashboard' route protected. */}
+              {/* Make the routes are protected. */}
               <PrivateRoute component={Dashboard} exact path="/dashboard" />
+              <PrivateRoute
+                component={CreateProfile}
+                exact
+                path="/create-profile"
+              />
             </Switch>
           </section>
         </Fragment>

@@ -21,7 +21,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
   const onChange = (e) =>
     setFormData({
       ...formData, // Make a copy of "formData".
-      [e.target.name]: e.target.value, // Change the default value with written in in the form value.
+      [e.target.name]: e.target.value, // Change the default value with written in the form value.
     });
 
   const onSubmit = (e) => {

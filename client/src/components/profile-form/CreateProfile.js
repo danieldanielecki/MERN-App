@@ -1,8 +1,11 @@
 import { connect } from "react-redux";
+import { createProfile } from "../../actions/profile";
+import { withRouter, Link } from "react-router-dom"; // "withRouter" is needed to use "history" object, which redirects user from the action.
 import React, { useState, Fragment } from "react";
 import PropTypes from "prop-types";
 
-const CreateProfile = (props) => {
+// Pull out "createProfile", so every time we access the property we don't have to do "props.createProfile". Same logic applies for "history".
+const CreateProfile = ({ createProfile, history }) => {
   // Hooks, pull out state "formData" and use "setFormData" function to update the state from "useState" hook.
   const [formData, setFormData] = useState({
     // Set initial state values.
@@ -44,6 +47,11 @@ const CreateProfile = (props) => {
       [e.target.name]: e.target.value, // Change the default value with written in the form value.
     });
 
+  const onSubmit = (e) => {
+    e.preventDefault(); // Prevent default behavior of a browser.
+    createProfile(formData, history); // Create Profile.
+  };
+
   return (
     <Fragment>
       <h1 className="large text-primary">Create Your Profile</h1>
@@ -52,7 +60,7 @@ const CreateProfile = (props) => {
         profile stand out
       </p>
       <small>* = required field</small>
-      <form className="form">
+      <form className="form" onSubmit={(e) => onSubmit(e)}>
         <div className="form-group">
           <select name="status" value={status} onChange={(e) => onChange(e)}>
             <option value="0">* Select Professional Status</option>
@@ -221,6 +229,9 @@ const CreateProfile = (props) => {
   );
 };
 
-CreateProfile.propTypes = {};
+// Make sure "createProfile" is required.
+CreateProfile.propTypes = {
+  createProfile: PropTypes.func.isRequired,
+};
 
-export default CreateProfile;
+export default connect(null, { createProfile })(withRouter(CreateProfile)); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map, here there's no state therefore "null". There is no second parameter, because there is no Action. Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use connect. "withRouter" has to wrap the "CreateProfile" to have the "history" object working and redirecting the user from an Action.

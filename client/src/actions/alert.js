@@ -1,7 +1,7 @@
 import { v4 as uuid } from "uuid";
 import { SET_ALERT, REMOVE_ALERT } from "./types";
 
-// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point it "(msg, alertType)" parameters then "=>", "(dispatch)" and "=>" again to do so.
+// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "(msg, alertType)" parameters then "=>", "(dispatch)" and "=>" again to do so.
 export const setAlert = (msg, alertType, timeout = 5000) => (dispatch) => {
   const id = uuid();
 

@@ -8,6 +8,7 @@ import store from "./store";
 import Alert from "./components/layout/Alert";
 import CreateProfile from "./components/profile-form/CreateProfile";
 import Dashboard from "./components/dashboard/Dashboard";
+import EditProfile from "./components/profile-form/EditProfile";
 import Landing from "./components/layout/Landing";
 import Login from "./components/auth/Login";
 import Navbar from "./components/layout/Navbar";
@@ -23,7 +24,7 @@ const App = () => {
   // React's Hook "useEffect()", because we're dealing with Functional Components, instead of Class Components and its lifecycle methods such as "componentDidMount()".
   useEffect(() => {
     store.dispatch(loadUser()); // The way "loadUser" action can be dispatched is by taking the "story" directly and call "dispatch" method, which is a method on a store and we can simply pass in "loadUser()".
-  }, []); // The brackets "[]" here makes "useEffect()" to run only once, without brackets "useEffect()" will keep running and it'll be a constant loop. The brackets basically is equivalent to "componentDidMount()" in Class Components.
+  }, []); // The brackets "[]" here makes "useEffect()" to run only once, without brackets "useEffect()" will keep running and it'll be a constant loop. The brackets basically are equivalent to "componentDidMount()" in Class Components.
 
   // "<Provider>" must wrap everything, so all component can access the app level state.
   return (
@@ -43,6 +44,11 @@ const App = () => {
                 component={CreateProfile}
                 exact
                 path="/create-profile"
+              />
+              <PrivateRoute
+                component={EditProfile}
+                exact
+                path="/edit-profile"
               />
             </Switch>
           </section>

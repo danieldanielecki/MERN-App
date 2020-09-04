@@ -2,6 +2,7 @@ import { connect } from "react-redux";
 import { getCurrentProfile } from "../../actions/profile";
 import React, { useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
+import DashboardActions from "./DashboardActions";
 import PropTypes from "prop-types";
 import Spinner from "../layout/Spinner";
 
@@ -14,7 +15,7 @@ const Dashboard = ({
   // React's Hook "useEffect()", because we're dealing with Functional Components, instead of Class Components and its lifecycle methods such as "componentDidMount()".
   useEffect(() => {
     getCurrentProfile(); // Get current profile as soon as the component loads.
-  }, []); // The brackets "[]" here makes "useEffect()" to run only once, without brackets "useEffect()" will keep running and it'll be a constant loop. The brackets basically is equivalent to "componentDidMount()" in Class Components.
+  }, []); // The brackets "[]" here makes "useEffect()" to run only once, without brackets "useEffect()" will keep running and it'll be a constant loop. The brackets basically are equivalent to "componentDidMount()" in Class Components.
 
   // If the "profile" is "null" and the its still loading then we wanna show the spinner.
   return loading && profile === null ? (
@@ -28,7 +29,9 @@ const Dashboard = ({
       </p>
       {/* Show different text based on if profile exists. */}
       {profile !== null ? (
-        <Fragment>has</Fragment>
+        <Fragment>
+          <DashboardActions />
+        </Fragment>
       ) : (
         <Fragment>
           <p>You have not yet setup a profile, please add some info</p>

@@ -1,11 +1,16 @@
 import { connect } from "react-redux";
-import { createProfile } from "../../actions/profile";
+import { createProfile, getCurrentProfile } from "../../actions/profile";
 import { withRouter, Link } from "react-router-dom"; // "withRouter" is needed to use "history" object, which redirects user from the action.
-import React, { useState, Fragment } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import PropTypes from "prop-types";
 
-// Pull out "createProfile", so every time we access the property we don't have to do "props.createProfile". Same logic applies for "history".
-const CreateProfile = ({ createProfile, history }) => {
+// Pull out "createProfile", so every time we access the property we don't have to do "props.createProfile". Same logic applies for "getCurrentProfile" and "history". In addition to that, from "profile" pull out "profile" and "loading".
+const EditProfile = ({
+  profile: { profile, loading },
+  createProfile,
+  getCurrentProfile,
+  history,
+}) => {
   // Hooks, pull out state "formData" and use "setFormData" function to update the state from "useState" hook.
   const [formData, setFormData] = useState({
     // Set initial state values.
@@ -24,6 +29,28 @@ const CreateProfile = ({ createProfile, history }) => {
   });
 
   const [displaySocialInputs, toggleSocialInputs] = useState(false); // Set default state to "false" for displaying social inputs and use "toggleSocialInputs" to toggle its state.
+
+  // React's Hook "useEffect()", because we're dealing with Functional Components, instead of Class Components and its lifecycle methods such as "componentDidMount()".
+  useEffect(() => {
+    getCurrentProfile();
+
+    // After we got the profile then we have to check. If certain data (e.g. profile company) is loading or it doesn't exists then keep the input field blank, otherwise fill it with the given data.
+    setFormData({
+      company: loading || !profile.company ? "" : profile.company,
+      website: loading || !profile.website ? "" : profile.website,
+      location: loading || !profile.location ? "" : profile.location,
+      status: loading || !profile.status ? "" : profile.status,
+      skills: loading || !profile.skills ? "" : profile.skills,
+      githubusername:
+        loading || !profile.githubusername ? "" : profile.githubusername,
+      bio: loading || !profile.bio ? "" : profile.bio,
+      twitter: loading || !profile.social ? "" : profile.social.twitter,
+      facebook: loading || !profile.social ? "" : profile.social.facebook,
+      linkedin: loading || !profile.social ? "" : profile.social.linkedin,
+      youtube: loading || !profile.social ? "" : profile.social.youtube,
+      instagram: loading || !profile.social ? "" : profile.social.instagram,
+    });
+  }, [loading]); // The brackets "[loading]" here makes "useEffect()" to run only it loads, without brackets "useEffect()" will keep running and it'll be a constant loop. The brackets basically are equivalent to "componentDidMount()" in Class Components.
 
   // Pull out these values from form data, so every time we access the property we don't have to do "formData.company", instead just "company", etc.
   const {
@@ -49,7 +76,7 @@ const CreateProfile = ({ createProfile, history }) => {
 
   const onSubmit = (e) => {
     e.preventDefault(); // Prevent default behavior of a browser.
-    createProfile(formData, history); // Create Profile.
+    createProfile(formData, history, true); // Create Profile and mark that's editing.
   };
 
   return (
@@ -229,9 +256,17 @@ const CreateProfile = ({ createProfile, history }) => {
   );
 };
 
-// Make sure "createProfile" is required.
-CreateProfile.propTypes = {
+// Make sure "createProfile", "getCurrentProfile" and "profile" are required.
+EditProfile.propTypes = {
   createProfile: PropTypes.func.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired,
 };
 
-export default connect(null, { createProfile })(withRouter(CreateProfile)); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map, here there's no state therefore "null". The second is an object with any Actions we wanna use. "createProfile" allows us to access "props.createProfile" or simply "createProfile" nested into an object how it's done here.Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use connect. "withRouter" has to wrap the "CreateProfile" to have the "history" object working and redirecting the user from an Action.
+const mapStateToProps = (state) => ({
+  profile: state.profile, // Whatever State we want or whatever Prop we wanna call it, here it's "profile". "profile" comes from the root reducer, accesing this via "state.profile" to get the state inside "profile". So "props.profile" is becoming available for us, or simply "profile" nested into an object how it's done here.
+});
+
+export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
+  withRouter(EditProfile)
+); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. The second is an object with any Actions we wanna use. "createProfile" allows us to access "props.createProfile" or simply "createProfile" nested into an object how it's done here. Same logic related to "props" applies to "getCurrentProfile". Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use connect. "withRouter" has to wrap the "CreateProfile" to have the "history" object working and redirecting the user from an Action.

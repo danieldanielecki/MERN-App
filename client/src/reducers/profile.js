@@ -1,4 +1,9 @@
-import { CLEAR_PROFILE, GET_PROFILE, PROFILE_ERROR } from "../actions/types";
+import {
+  CLEAR_PROFILE,
+  GET_PROFILE,
+  PROFILE_ERROR,
+  UPDATE_PROFILE,
+} from "../actions/types";
 
 // Initial state data.
 const initialState = {
@@ -14,7 +19,9 @@ export default function (state = initialState, action) {
   const { type, payload } = action; // Pull out these valeus from the action, so every time we access the property we don't have to do "action.type" etc.
 
   switch (type) {
+    // These cases have exactly the same logic, therefore it can be used with simplified "case" statement.
     case GET_PROFILE:
+    case UPDATE_PROFILE:
       // State is immutable, therefore when adding another one it'll be an array. That's why we need to use spread operator to return all of them. On top of this, return "profile" which is taken from the response's payload as well as set "loading" to "false" once the request is done.
       return {
         ...state,

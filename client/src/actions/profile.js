@@ -1,6 +1,6 @@
 import axios from "axios";
 import { setAlert } from "./alert";
-import { GET_PROFILE, PROFILE_ERROR } from "./types";
+import { GET_PROFILE, PROFILE_ERROR, UPDATE_PROFILE } from "./types";
 
 // Get current user's profile.
 // Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "()" then "=>", "(dispatch)" and "=>" again to do so.
@@ -21,7 +21,7 @@ export const getCurrentProfile = () => async (dispatch) => {
 };
 
 // Create or update profile.
-// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "(formData, history, edit = false)" parameters then "=>", "(dispatch)" and "=>" again to do so. "formData" will have some data. "history" has method called "push" which will redirect us to client side routes. "edit" is for letting know if we're updating/editing or creating a new profile.
+// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "(formData, history, edit = false)" parameters then "=>", "async (dispatch)" and "=>" again to do so. "formData" will have some data. "history" has method called "push" which will redirect us to client side routes. "edit" is for letting know if we're updating/editing or creating a new profile.
 export const createProfile = (formData, history, edit = false) => async (
   dispatch
 ) => {
@@ -47,6 +47,82 @@ export const createProfile = (formData, history, edit = false) => async (
     if (!edit) {
       history.push("/dashboard"); // Redirection in action is different, simply "<Redirect..." doesn't work here.
     }
+  } catch (err) {
+    const errors = err.response.data.errors; // Get an array of errors from the backend.
+
+    // Check if response from backend returned errors.
+    if (errors) {
+      // Loop through the errors and for each of the errors dispatch "setAlert" action.
+      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+    }
+
+    dispatch({
+      type: PROFILE_ERROR, // If request was not successful, dispatch "PROFILE_ERROR".
+      msg: { msg: err.response.statusText, status: err.response.status }, // Get the message text and status code from the response.
+    });
+  }
+};
+
+// Add Experience.
+// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "(formData, history)" then "=>", "async (dispatch)" and "=>" again to do so.
+export const addExperience = (formData, history) => async (dispatch) => {
+  try {
+    // We're sending data, so we'll need to create config object.
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const res = await axios.put("/api/profile/experience", formData, config); // Get HTTP response.
+
+    dispatch({
+      type: UPDATE_PROFILE, // If request was successful, dispatch "UPDATE_PROFILE".
+      payload: res.data, // Payload will be the user's data.
+    });
+
+    // Message should be different depending if the profile is updated or created.
+    dispatch(setAlert("Experience Added", "success"));
+
+    history.push("/dashboard"); // Redirection in action is different, simply "<Redirect..." doesn't work here.
+  } catch (err) {
+    const errors = err.response.data.errors; // Get an array of errors from the backend.
+
+    // Check if response from backend returned errors.
+    if (errors) {
+      // Loop through the errors and for each of the errors dispatch "setAlert" action.
+      errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
+    }
+
+    dispatch({
+      type: PROFILE_ERROR, // If request was not successful, dispatch "PROFILE_ERROR".
+      msg: { msg: err.response.statusText, status: err.response.status }, // Get the message text and status code from the response.
+    });
+  }
+};
+
+// Add Education.
+// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "(formData, history)" then "=>", "async (dispatch)" and "=>" again to do so.
+export const addEducation = (formData, history) => async (dispatch) => {
+  try {
+    // We're sending data, so we'll need to create config object.
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const res = await axios.put("/api/profile/education", formData, config); // Get HTTP response.
+
+    dispatch({
+      type: UPDATE_PROFILE, // If request was successful, dispatch "UPDATE_PROFILE".
+      payload: res.data, // Payload will be the user's data.
+    });
+
+    // Message should be different depending if the profile is updated or created.
+    dispatch(setAlert("Education Added", "success"));
+
+    history.push("/dashboard"); // Redirection in action is different, simply "<Redirect..." doesn't work here.
   } catch (err) {
     const errors = err.response.data.errors; // Get an array of errors from the backend.
 

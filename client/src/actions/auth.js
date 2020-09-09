@@ -13,7 +13,7 @@ import {
 } from "./types";
 
 // Load User.
-// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "()" then "=>", "(dispatch)" and "=>" again to do so.
+// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "()" then "=>", "async (dispatch)" and "=>" again to do so.
 export const loadUser = () => async (dispatch) => {
   // Check if there is a token and if it is then put this into a global header. Here it'll check only for the first time when the user loads.
   if (localStorage.token) {
@@ -36,7 +36,7 @@ export const loadUser = () => async (dispatch) => {
 };
 
 // Register User action.
-// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "({ name, email, password })" parameters then "=>", "(dispatch)" and "=>" again to do so.
+// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "({ name, email, password })" parameters then "=>", "async (dispatch)" and "=>" again to do so.
 export const register = ({ name, email, password }) => async (dispatch) => {
   // Create config object with HTTP headers.
   const config = {
@@ -74,7 +74,7 @@ export const register = ({ name, email, password }) => async (dispatch) => {
 };
 
 // Login User action.
-// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "(email, password)" parameters then "=>", "(dispatch)" and "=>" again to do so.
+// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "(email, password)" parameters then "=>", "async (dispatch)" and "=>" again to do so.
 export const login = (email, password) => async (dispatch) => {
   // Create config object with HTTP headers.
   const config = {

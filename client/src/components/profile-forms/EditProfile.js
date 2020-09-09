@@ -52,7 +52,7 @@ const EditProfile = ({
     });
   }, [loading]); // The brackets "[loading]" here makes "useEffect()" to run only it loads, without brackets "useEffect()" will keep running and it'll be a constant loop. The brackets basically are equivalent to "componentDidMount()" in Class Components.
 
-  // Pull out these values from form data, so every time we access the property we don't have to do "formData.company", instead just "company", etc.
+  // Pull out these values from "formData", so every time we access the property we don't have to do "formData.company", instead just "company", etc.
   const {
     company,
     website,
@@ -71,7 +71,7 @@ const EditProfile = ({
   const onChange = (e) =>
     setFormData({
       ...formData, // Make a copy of "formData".
-      [e.target.name]: e.target.value, // Change the default value with written in the form value.
+      [e.target.name]: e.target.value, // Change the default value with what has been written into the form.
     });
 
   const onSubmit = (e) => {

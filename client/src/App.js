@@ -5,10 +5,12 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import setAuthToken from "./utils/setAuthToken";
 import store from "./store";
+import AddEducation from "./components/profile-forms/AddEducation";
+import AddExperience from "./components/profile-forms/AddExperience";
 import Alert from "./components/layout/Alert";
-import CreateProfile from "./components/profile-form/CreateProfile";
+import CreateProfile from "./components/profile-forms/CreateProfile";
 import Dashboard from "./components/dashboard/Dashboard";
-import EditProfile from "./components/profile-form/EditProfile";
+import EditProfile from "./components/profile-forms/EditProfile";
 import Landing from "./components/layout/Landing";
 import Login from "./components/auth/Login";
 import Navbar from "./components/layout/Navbar";
@@ -49,6 +51,16 @@ const App = () => {
                 component={EditProfile}
                 exact
                 path="/edit-profile"
+              />
+              <PrivateRoute
+                component={AddExperience}
+                exact
+                path="/add-experience"
+              />
+              <PrivateRoute
+                component={AddEducation}
+                exact
+                path="/add-education"
               />
             </Switch>
           </section>

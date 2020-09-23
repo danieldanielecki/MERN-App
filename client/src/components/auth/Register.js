@@ -29,7 +29,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 
     // Check if passwords don't match.
     if (password !== password2) {
-      setAlert("Passwords do not match", "danger"); // Passwords don't match, therefore for now console log this information.
+      setAlert("Passwords do not match", "danger"); // Passwords don't match, therefore dispatch "setAlert" action.
     } else {
       register({ name, email, password }); // Passwords do match, therefore pass into "register" action name, email and password.
     }

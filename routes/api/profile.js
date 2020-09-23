@@ -6,6 +6,7 @@ const request = require("request");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
 
+const Post = require("../../models/Post");
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
 
@@ -157,7 +158,7 @@ router.get("/user/:user_id", async (req, res) => {
 // Middleware is being added as a second parameter always. Whatever route we want to protect, just add "auth" as a second parameter.
 router.delete("/", auth, async (req, res) => {
   try {
-    // @todo - remove users posts
+    await Post.deleteMany({ user: req.user.id }); // Remove User's posts by ID based on the token. "req.user.id" matches the user which is logged in. // TODO: So far it doesn't work, check it out in the "Section 11: Posts & Comments".
     await Profile.findOneAndRemove({ user: req.user.id }); // Remove Profile by ID based on the token. "req.user.id" matches the user which is logged in.
     await User.findOneAndRemove({ _id: req.user.id }); // Remove User by ID based on the token. "req.user.id" matches the user which is logged in.
 

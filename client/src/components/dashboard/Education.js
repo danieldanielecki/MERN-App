@@ -1,10 +1,11 @@
 import { connect } from "react-redux";
+import { deleteEducation } from "../../actions/profile";
 import React, { Fragment } from "react";
 import Moment from "react-moment";
 import PropTypes from "prop-types";
 
-// Pull out "education", so every time we access the property we don't have to do "props.education".
-const Education = ({ education }) => {
+// Pull out "education", so every time we access the property we don't have to do "props.education". Same logic applies for "deleteEducation".
+const Education = ({ education, deleteEducation }) => {
   // Get user's educations.
   const educations = education.map((edu) => (
     <tr key={edu._id}>
@@ -20,7 +21,12 @@ const Education = ({ education }) => {
         )}
       </td>
       <td>
-        <button className="btn btn-danger">Delete</button>
+        <button
+          onClick={() => deleteEducation(edu._id)}
+          className="btn btn-danger"
+        >
+          Delete
+        </button>
       </td>
     </tr>
   ));
@@ -44,9 +50,10 @@ const Education = ({ education }) => {
   );
 };
 
-// Make sure "education" prop is required.
+// Make sure "education" and "deleteEducation" props are required.
 Education.propTypes = {
   education: PropTypes.array.isRequired,
+  deleteEducation: PropTypes.func.isRequired,
 };
 
-export default Education;
+export default connect(null, { deleteEducation })(Education);

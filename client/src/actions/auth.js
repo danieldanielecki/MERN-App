@@ -13,7 +13,7 @@ import {
 } from "./types";
 
 // Load User.
-// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "()" then "=>", "async (dispatch)" and "=>" again to do so.
+// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "()" (which is allowed by the "thunk" middleware and it wraps an expression to delay its evaluation) then "=>", "async (dispatch)" and "=>" again to do so.
 export const loadUser = () => async (dispatch) => {
   // Check if there is a token and if it is then put this into a global header. Here it'll check only for the first time when the user loads.
   if (localStorage.token) {
@@ -36,7 +36,7 @@ export const loadUser = () => async (dispatch) => {
 };
 
 // Register User action.
-// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "({ name, email, password })" parameters then "=>", "async (dispatch)" and "=>" again to do so.
+// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "({ name, email, password })" (which is allowed by the "thunk" middleware and it wraps an expression to delay its evaluation) then "=>", "async (dispatch)" and "=>" again to do so.
 export const register = ({ name, email, password }) => async (dispatch) => {
   // Create config object with HTTP headers.
   const config = {
@@ -48,7 +48,7 @@ export const register = ({ name, email, password }) => async (dispatch) => {
   const body = JSON.stringify({ name, email, password }); // Prepare the data to send.
 
   try {
-    const res = await axios.post("/api/users", body, config); // Get HTTP response.
+    const res = await axios.post("/api/users", body, config); // Get HTTP's POST response.
 
     // Dispatch an action when registration has been successful.
     dispatch({
@@ -74,7 +74,7 @@ export const register = ({ name, email, password }) => async (dispatch) => {
 };
 
 // Login User action.
-// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "(email, password)" parameters then "=>", "async (dispatch)" and "=>" again to do so.
+// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "(email, password)" (which is allowed by the "thunk" middleware and it wraps an expression to delay its evaluation) then "=>", "async (dispatch)" and "=>" again to do so.
 export const login = (email, password) => async (dispatch) => {
   // Create config object with HTTP headers.
   const config = {
@@ -87,7 +87,7 @@ export const login = (email, password) => async (dispatch) => {
 
   try {
     // Using JSON Web Token (JWT) is a stateless (which means the data doesn't stay, we need to keep making a request to the backend) form of authentication. So actually we have to keep querying the server and see if the token on frontend matches that one on the backend. It'll be done in an action "api/auth" route.
-    const res = await axios.post("/api/auth", body, config); // Get HTTP response.
+    const res = await axios.post("/api/auth", body, config); // Get HTTP's POST response.
 
     // Dispatch an action when login has been successful.
     dispatch({

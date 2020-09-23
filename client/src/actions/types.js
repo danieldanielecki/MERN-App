@@ -1,4 +1,5 @@
 // This is a centralized place to have all actions, which can be accessed and edited if possibly from one place for all types of the same actions.
+export const ACCOUNT_DELETED = "ACCOUNT_DELETED";
 export const AUTH_ERROR = "AUTH_ERROR";
 export const CLEAR_PROFILE = "CLEAR_PROFILE";
 export const GET_PROFILE = "GET_PROFILE";

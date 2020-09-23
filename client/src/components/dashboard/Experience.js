@@ -1,10 +1,11 @@
 import { connect } from "react-redux";
+import { deleteExperience } from "../../actions/profile";
 import React, { Fragment } from "react";
 import Moment from "react-moment";
 import PropTypes from "prop-types";
 
-// Pull out "experience", so every time we access the property we don't have to do "props.experience".
-const Experience = ({ experience }) => {
+// Pull out "experience", so every time we access the property we don't have to do "props.experience". Same logic applies for "deleteExperience".
+const Experience = ({ experience, deleteExperience }) => {
   // Get user's experiences.
   const experiences = experience.map((exp) => (
     <tr key={exp._id}>
@@ -20,7 +21,12 @@ const Experience = ({ experience }) => {
         )}
       </td>
       <td>
-        <button className="btn btn-danger">Delete</button>
+        <button
+          onClick={() => deleteExperience(exp._id)}
+          className="btn btn-danger"
+        >
+          Delete
+        </button>
       </td>
     </tr>
   ));
@@ -44,9 +50,10 @@ const Experience = ({ experience }) => {
   );
 };
 
-// Make sure "experience" prop is required.
+// Make sure "experience" and "deleteExperience" props are required.
 Experience.propTypes = {
   experience: PropTypes.array.isRequired,
+  deleteExperience: PropTypes.func.isRequired,
 };
 
-export default Experience;
+export default connect(null, { deleteExperience })(Experience);

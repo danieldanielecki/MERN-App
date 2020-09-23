@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { getCurrentProfile } from "../../actions/profile";
+import { deleteAccount, getCurrentProfile } from "../../actions/profile";
 import React, { useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
 import DashboardActions from "./DashboardActions";
@@ -8,11 +8,12 @@ import Experience from "./Experience";
 import PropTypes from "prop-types";
 import Spinner from "../layout/Spinner";
 
-// Pull out these values, so every time we access the property we don't have to do, for example, "props.getCurrentProfile", instead simply "getCurrentProfile". Same logic applies for "auth" and "profile". In addition to that, from "profile" pull out "profile" and "loading" as well as "user" from "auth".
+// Pull out these values, so every time we access the property we don't have to do, for example, "props.getCurrentProfile", instead simply "getCurrentProfile". Same logic applies for "auth", "profile" and "deleteAccount". In addition to that, from "profile" pull out "profile" and "loading" as well as "user" from "auth".
 const Dashboard = ({
   getCurrentProfile,
   auth: { user },
   profile: { profile, loading },
+  deleteAccount,
 }) => {
   // React's Hook "useEffect()", because we're dealing with Functional Components, instead of Class Components and its lifecycle methods such as "componentDidMount()".
   useEffect(() => {
@@ -35,6 +36,12 @@ const Dashboard = ({
           <DashboardActions />
           <Experience experience={profile.experience} />
           <Education education={profile.education} />
+
+          <div className="my-2">
+            <button className="btn btn-danger" onClick={() => deleteAccount()}>
+              <i className="fas fa-user-minus"></i> Delete My Account
+            </button>
+          </div>
         </Fragment>
       ) : (
         <Fragment>
@@ -48,11 +55,12 @@ const Dashboard = ({
   );
 };
 
-// Make sure "getCurrentProfile", "auth" and "profile" props are required.
+// Make sure "getCurrentProfile", "auth", "profile" and "deleteAccount" props are required.
 Dashboard.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired,
+  deleteAccount: PropTypes.object.isRequired,
 };
 
 // Whatever State we want or whatever Prop we wanna call it, here it's "auth". "auth" comes from the root reducer, accesing this via "state.auth" to get the state inside "auth". So "props.auth" is becoming available for us, or simply "auth" nested into an object how it's done here. Same logic applies for "profile".
@@ -61,4 +69,6 @@ const mapStateToProps = (state) => ({
   profile: state.profile,
 });
 
-export default connect(mapStateToProps, { getCurrentProfile })(Dashboard); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. The second is an object with any Actions we wanna use. "getCurrentProfile" allows us to access "props.getCurrentProfile" or simply "getCurrentProfile" nested into an object how it's done here. Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use connect.
+export default connect(mapStateToProps, { getCurrentProfile, deleteAccount })(
+  Dashboard
+); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. The second is an object with any Actions we wanna use. "getCurrentProfile" allows us to access "props.getCurrentProfile" or simply "getCurrentProfile" nested into an object how it's done here. Same logic related to "props" applies to "deleteAccount". Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use connect.

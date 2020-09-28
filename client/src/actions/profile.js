@@ -4,18 +4,76 @@ import {
   ACCOUNT_DELETED,
   CLEAR_PROFILE,
   GET_PROFILE,
+  GET_PROFILES,
+  GET_REPOS,
   PROFILE_ERROR,
   UPDATE_PROFILE,
 } from "./types";
 
 // Get current user's profile.
-// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "()" (which is allowed by the "thunk" middleware and it wraps an expression to delay its evaluation) then "=>", "(dispatch)" and "=>" again to do so.
+// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "()" (which is allowed by the "thunk" middleware and it wraps an expression to delay its evaluation) then "=>", "async (dispatch)" and "=>" again to do so.
 export const getCurrentProfile = () => async (dispatch) => {
   try {
     const res = await axios.get("/api/profile/me"); // Make request to "/api/profile/me" backend route. We don't have to pass an ID or anything, because it'll know which profile to load from the token we sent which has the user ID.
 
     dispatch({
       type: GET_PROFILE, // If request was successful, dispatch "GET_PROFILE".
+      payload: res.data, // Payload will be the user's data.
+    });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR, // If request was not successful, dispatch "PROFILE_ERROR".
+      msg: { msg: err.response.statusText, status: err.response.status }, // Get the message text and status code from the response.
+    });
+  }
+};
+
+// Get all profiles.
+// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "()" (which is allowed by the "thunk" middleware and it wraps an expression to delay its evaluation) then "=>", "async (dispatch)" and "=>" again to do so.
+export const getProfiles = () => async (dispatch) => {
+  dispatch({ type: CLEAR_PROFILE }); // When user goes to profiles list page lets clear whatever is in the current profile, because when we visit a single user profile it's gonna to the state, so dispatch "CLEAR_PROFILE". It might prevent flashing of past user's profile, not sure if that's essentially needed.
+
+  try {
+    const res = await axios.get("/api/profile"); // Make request to "/api/profile" backend route. We don't have to pass an ID or anything, because it'll know which profile to load from the token we sent which has the user ID.
+
+    dispatch({
+      type: GET_PROFILES, // If request was successful, dispatch "GET_PROFILES".
+      payload: res.data, // Payload will be the user's data.
+    });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR, // If request was not successful, dispatch "PROFILE_ERROR".
+      msg: { msg: err.response.statusText, status: err.response.status }, // Get the message text and status code from the response.
+    });
+  }
+};
+
+// Get aprofile by ID.
+// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "(userId)" (which is allowed by the "thunk" middleware and it wraps an expression to delay its evaluation) then "=>", "async (dispatch)" and "=>" again to do so. Get profile ID based on user ID (those 2 are different).
+export const getProfileById = (userId) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/profile/user/${userId}`); // Make request to "/api/profile/user/${userId}" backend route. We don't have to pass an ID or anything, because it'll know which profile to load from the token we sent which has the user ID.
+
+    dispatch({
+      type: GET_PROFILE, // If request was successful, dispatch "GET_PROFILE".
+      payload: res.data, // Payload will be the user's data.
+    });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR, // If request was not successful, dispatch "PROFILE_ERROR".
+      msg: { msg: err.response.statusText, status: err.response.status }, // Get the message text and status code from the response.
+    });
+  }
+};
+
+// Get GitHub repos.
+// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "(username)" (which is allowed by the "thunk" middleware and it wraps an expression to delay its evaluation) then "=>", "async (dispatch)" and "=>" again to do so. Get GitHub repos based on GitHub's username.
+export const getGithubRepos = (username) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/profile/github/${username}`); // Make request to "/api/profile/github/${username}" backend route. We don't have to pass an ID or anything, because it'll know which profile to load from the token we sent which has the user ID.
+
+    dispatch({
+      type: GET_REPOS, // If request was successful, dispatch "GET_REPOS".
       payload: res.data, // Payload will be the user's data.
     });
   } catch (err) {

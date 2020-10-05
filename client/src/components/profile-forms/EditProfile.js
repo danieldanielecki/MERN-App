@@ -4,7 +4,7 @@ import { withRouter, Link } from "react-router-dom"; // "withRouter" is needed t
 import React, { useEffect, useState, Fragment } from "react";
 import PropTypes from "prop-types";
 
-// Pull out "createProfile", so every time we access the property we don't have to do "props.createProfile". Same logic applies for "getCurrentProfile" and "history". In addition to that, from "profile" pull out "profile" and "loading".
+// Pull out "createProfile", so every time we access the property we don't have to do "props.createProfile", instead simply use this variable directly "createProfile". Same logic applies for "getCurrentProfile" and "history". In addition to that, from "profile" pull out "profile" and "loading".
 const EditProfile = ({
   profile: { profile, loading },
   createProfile,
@@ -32,7 +32,7 @@ const EditProfile = ({
 
   // React's Hook "useEffect()", because we're dealing with Functional Components, instead of Class Components and its lifecycle methods such as "componentDidMount()".
   useEffect(() => {
-    getCurrentProfile();
+    getCurrentProfile(); // Get current profile as soon as the component loads.
 
     // After we got the profile then we have to check. If certain data (e.g. profile company) is loading or it doesn't exists then keep the input field blank, otherwise fill it with the given data.
     setFormData({
@@ -269,4 +269,4 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
   withRouter(EditProfile)
-); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. The second is an object with any Actions we wanna use. "createProfile" allows us to access "props.createProfile" or simply "createProfile" nested into an object how it's done here. Same logic related to "props" applies to "getCurrentProfile". Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use connect. "withRouter" has to wrap the "CreateProfile" to have the "history" object working and redirecting the user from an Action.
+); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. The second is an object with any Actions we wanna use. "createProfile" allows us to access "props.createProfile" or simply "createProfile" nested into an object how it's done here. Same logic related to "props" applies to "getCurrentProfile". Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use "connect". "withRouter" has to wrap the "CreateProfile" to have the "history" object working and redirecting the user from an Action.

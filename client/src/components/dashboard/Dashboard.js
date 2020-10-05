@@ -8,7 +8,7 @@ import Experience from "./Experience";
 import PropTypes from "prop-types";
 import Spinner from "../layout/Spinner";
 
-// Pull out these values, so every time we access the property we don't have to do, for example, "props.getCurrentProfile", instead simply "getCurrentProfile". Same logic applies for "auth", "profile" and "deleteAccount". In addition to that, from "profile" pull out "profile" and "loading" as well as "user" from "auth".
+// Pull out these values, so every time we access the property we don't have to do, for example, "props.getCurrentProfile", instead simply use this variable directly "getCurrentProfile". Same logic applies for "auth", "profile" and "deleteAccount". In addition to that, from "profile" pull out "profile" and "loading" as well as "user" from "auth".
 const Dashboard = ({
   getCurrentProfile,
   auth: { user },
@@ -71,4 +71,4 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, { getCurrentProfile, deleteAccount })(
   Dashboard
-); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. The second is an object with any Actions we wanna use. "getCurrentProfile" allows us to access "props.getCurrentProfile" or simply "getCurrentProfile" nested into an object how it's done here. Same logic related to "props" applies to "deleteAccount". Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use connect.
+); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. The second is an object with any Actions we wanna use. "getCurrentProfile" allows us to access "props.getCurrentProfile" or simply "getCurrentProfile" nested into an object how it's done here. Same logic related to "props" applies to "deleteAccount". Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use "connect".

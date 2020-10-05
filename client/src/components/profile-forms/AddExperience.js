@@ -4,7 +4,7 @@ import { withRouter, Link } from "react-router-dom"; // "withRouter" is needed t
 import React, { useState, Fragment } from "react";
 import PropTypes from "prop-types";
 
-// Pull out "addExperience", so every time we access the property we don't have to do "props.addExperience". Same logic applies for "history".
+// Pull out "addExperience", so every time we access the property we don't have to do "props.addExperience", instead simply use this variable directly "addExperience". Same logic applies for "history".
 const AddExperience = ({ addExperience, history }) => {
   // Hooks, pull out state "formData" and use "setFormData" function to update the state from "useState" hook.
   const [formData, setFormData] = useState({
@@ -132,4 +132,4 @@ AddExperience.propTypes = {
   addExperience: PropTypes.func.isRequired,
 };
 
-export default connect(null, { addExperience })(withRouter(AddExperience)); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map, here there's no state therefore "null". The second is an object with any Actions we wanna use. "addExperience" allows us to access "props.addExperience" or simply "addExperience" nested into an object how it's done here.Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use connect. "withRouter" has to wrap the "AddExperience" to have the "history" object working and redirecting the user from an Action.
+export default connect(null, { addExperience })(withRouter(AddExperience)); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map, here there's no state therefore "null". The second is an object with any Actions we wanna use. "addExperience" allows us to access "props.addExperience" or simply "addExperience" nested into an object how it's done here.Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use "connect". "withRouter" has to wrap the "AddExperience" to have the "history" object working and redirecting the user from an Action.

@@ -246,7 +246,7 @@ export const deleteAccount = () => async (dispatch) => {
   if (window.confirm("Are you sure? This can NOT be undone!")) {
     // That's a dangerous action to delete an account & profile, therefore wrap this in an "if" statement to confirm it.
     try {
-      const res = await axios.delete(`/api/profile`); // Get HTTP's DELETE response.
+      await axios.delete(`/api/profile`); // Get HTTP's DELETE response.
 
       dispatch({
         type: CLEAR_PROFILE, // If request was successful, dispatch "CLEAR_PROFILE". There's no payload, just "dispatch".

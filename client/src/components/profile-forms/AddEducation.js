@@ -1,6 +1,6 @@
 import { addEducation } from "../../actions/profile";
 import { connect } from "react-redux";
-import { withRouter, Link } from "react-router-dom"; // "withRouter" is needed to use "history" object, which redirects user from the action.
+import { withRouter } from "react-router-dom"; // "withRouter" is needed to use "history" object, which redirects user from the action.
 import React, { useState, Fragment } from "react";
 import PropTypes from "prop-types";
 

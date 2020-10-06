@@ -10,7 +10,7 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
   // React's Hook "useEffect()", because we're dealing with Functional Components, instead of Class Components and its lifecycle methods such as "componentDidMount()".
   useEffect(() => {
     getProfiles(); // Get profiles as soon as the component loads.
-  }, []); // The brackets "[]" here makes "useEffect()" to run only once, without brackets "useEffect()" will keep running and it'll be a constant loop. The brackets basically are equivalent to "componentDidMount()" in Class Components.
+  }, [getProfiles]); // The brackets "[]" here makes "useEffect()" to run only once, without brackets "useEffect()" will keep running and it'll be a constant loop. The brackets basically are equivalent to "componentDidMount()" in Class Components. ESLint said that "getProfiles" should be added as dependency between the "[]".
 
   return (
     <Fragment>

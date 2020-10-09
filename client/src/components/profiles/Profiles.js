@@ -14,6 +14,7 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
 
   return (
     <Fragment>
+      {/* Since we're getting data and displaying it we want to make sure that the profiles/data is loaded. Therefore, as long as it loads - show spinner. That way the UI is not actually rendered unless the data is loaded. */}
       {loading ? (
         <Spinner />
       ) : (

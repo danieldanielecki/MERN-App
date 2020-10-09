@@ -15,6 +15,7 @@ import Landing from "./components/layout/Landing";
 import Login from "./components/auth/Login";
 import Navbar from "./components/layout/Navbar";
 import PrivateRoute from "./components/routing/PrivateRoute";
+import Profile from "./components/profile/Profile";
 import Profiles from "./components/profiles/Profiles";
 import Register from "./components/auth/Register";
 
@@ -42,6 +43,7 @@ const App = () => {
               <Route component={Register} exact path="/register" />
               <Route component={Login} exact path="/login" />
               <Route component={Profiles} exact path="/profiles" />
+              <Route component={Profile} exact path="/profile/:id" />
               {/* Make the routes are protected. */}
               <PrivateRoute component={Dashboard} exact path="/dashboard" />
               <PrivateRoute

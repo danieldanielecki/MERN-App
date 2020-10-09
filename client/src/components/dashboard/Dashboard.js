@@ -20,7 +20,7 @@ const Dashboard = ({
     getCurrentProfile(); // Get current profile as soon as the component loads.
   }, [getCurrentProfile]); // The brackets "[]" here makes "useEffect()" to run only once, without brackets "useEffect()" will keep running and it'll be a constant loop. The brackets basically are equivalent to "componentDidMount()" in Class Components. ESLint said that "getCurrentProfile" should be added as dependency between the "[]".
 
-  // If the "profile" is "null" and the its still loading then we wanna show the spinner.
+  // Since we're getting data and displaying it we want to make sure that the profiles/data is loaded. Therefore, as long as it loads - show spinner. That way the UI is not actually rendered unless the data is loaded.
   return loading && profile === null ? (
     <Spinner />
   ) : (

@@ -50,7 +50,7 @@ const EditProfile = ({
       youtube: loading || !profile.social ? "" : profile.social.youtube,
       instagram: loading || !profile.social ? "" : profile.social.instagram,
     });
-  }, [loading, getCurrentProfile]); // The brackets "[]" here makes "useEffect()" to run only it loads, without brackets "useEffect()" will keep running and it'll be a constant loop. The brackets basically are equivalent to "componentDidMount()" in Class Components. ESLint said that "getCurrentProfile" should be added as dependency between the "[]" as well (like "loading" was already before these improvements).
+  }, [loading, getCurrentProfile]); // The brackets "[]" here makes "useEffect()" to run only it loads, without brackets "useEffect()" will keep running and it'll be a constant loop. The brackets basically are equivalent to "componentDidMount()" in Class Components. ESLint said that "getCurrentProfile" should be added as dependency between the "[]" as well (like "loading" was already before these improvements). Therefore, fix these warnings too.
 
   // Pull out these values from "formData", so every time we access the property we don't have to do "formData.company", instead just "company", etc.
   const {

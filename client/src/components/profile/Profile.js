@@ -3,6 +3,8 @@ import { getProfileById } from "../../actions/profile";
 import { Link } from "react-router-dom";
 import React, { useEffect, Fragment } from "react";
 import ProfileAbout from "./ProfileAbout";
+import ProfileEducation from "./ProfileEducation";
+import ProfileExperience from "./ProfileExperience";
 import ProfileTop from "./ProfileTop";
 import PropTypes from "prop-types";
 import Spinner from "../layout/Spinner";
@@ -40,6 +42,41 @@ const Profile = ({
           <div className="profile-gri my-1">
             <ProfileTop profile={profile} />
             <ProfileAbout profile={profile} />
+            <div className="profile-exp bg-white p-2">
+              <h2 className="text-primary">Experience</h2>
+              {/* Check if there's any experience, and if so, then display it, otherwise show information about no experience credentials. */}
+              {profile.experience.length > 0 ? (
+                <Fragment>
+                  {/* Loop/map through experiences and output each item. */}
+                  {profile.experience.map((experience) => (
+                    <ProfileExperience
+                      key={experience._id}
+                      experience={experience}
+                    />
+                  ))}
+                </Fragment>
+              ) : (
+                <h4>No experience credentials</h4>
+              )}
+            </div>
+            {/* TODO: The CSS isn't working correctly, because on Brad's videos it shows next to each other, not below.*/}
+            <div className="profile-edu bg-white p-2">
+              <h2 className="text-primary">Education</h2>
+              {/* Check if there's any education, and if so, then display it, otherwise show information about no education credentials. */}
+              {profile.education.length > 0 ? (
+                <Fragment>
+                  {/* Loop/map through educations and output each item. */}
+                  {profile.education.map((education) => (
+                    <ProfileEducation
+                      key={education._id}
+                      education={education}
+                    />
+                  ))}
+                </Fragment>
+              ) : (
+                <h4>No education credentials</h4>
+              )}
+            </div>
           </div>
         </Fragment>
       )}

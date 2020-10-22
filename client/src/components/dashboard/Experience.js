@@ -4,7 +4,7 @@ import React, { Fragment } from "react";
 import Moment from "react-moment";
 import PropTypes from "prop-types";
 
-// Pull out "experience", so every time we access the property we don't have to do "props.experience". Same logic applies for "deleteExperience".
+// Pull out "experience", so every time we access the property we don't have to do "props.experience", instead simply use this variable directly "experience". Same logic applies for "deleteExperience".
 const Experience = ({ experience, deleteExperience }) => {
   // Get user's experiences.
   const experiences = experience.map((exp) => (

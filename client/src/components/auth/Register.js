@@ -5,7 +5,7 @@ import React, { Fragment, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 
-// Pull out these values, so every time we access the property we don't have to do "props.setAlert". Same logic applies for "register" and "isAuthenticated".
+// Pull out these values, so every time we access the property we don't have to do "props.setAlert", instead simply use this variable directly "setAlert". Same logic applies for "register" and "isAuthenticated".
 const Register = ({ setAlert, register, isAuthenticated }) => {
   // Hooks, pull out state "formData" and use "setFormData" function to update the state from "useState" hook.
   const [formData, setFormData] = useState({

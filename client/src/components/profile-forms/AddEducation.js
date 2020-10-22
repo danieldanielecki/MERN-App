@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom"; // "withRouter" is needed to use 
 import React, { useState, Fragment } from "react";
 import PropTypes from "prop-types";
 
-// Pull out "addEducation", so every time we access the property we don't have to do "props.addEducation" , instead simply use this variable directly "addEducation". Same logic applies for "history".
+// Pull out "addEducation", so every time we access the property we don't have to do "props.addEducation", instead simply use this variable directly "addEducation". Same logic applies for "history".
 const AddEducation = ({ addEducation, history }) => {
   // Hooks, pull out state "formData" and use "setFormData" function to update the state from "useState" hook.
   const [formData, setFormData] = useState({

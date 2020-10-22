@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-// Pull out "profile", so every time we access the property we don't have to do "props.profile", instead simply use this variable directly "profile".  In addition to that, from "profile" pull out "status", "company", "location", "website", "social" and "user". On top of that, from "user" pull out "name" and "avatar".
+// Pull out "profile", so every time we access the property we don't have to do "props.profile", instead simply use this variable directly "profile". In addition to that, from "profile" pull out "status", "company", "location", "website", "social" and "user". On top of that, from "user" pull out "name" and "avatar".
 const ProfileTop = ({
   profile: {
     status,

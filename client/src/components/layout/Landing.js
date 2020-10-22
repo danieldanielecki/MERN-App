@@ -3,6 +3,7 @@ import { Link, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import React from "react";
 
+// Pull out "isAuthenticated", so every time we access the property we don't have to do "props.isAuthenticated", instead simply use this variable directly "isAuthenticated".
 export const Landing = ({ isAuthenticated }) => {
   // Redirect to the Dashboard if user is logged in.
   if (isAuthenticated) {

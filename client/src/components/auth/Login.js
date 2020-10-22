@@ -4,7 +4,7 @@ import React, { Fragment, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 
-// Pull out "login", so every time we access the property we don't have to do "props.login". Instead, simply "login". Same logic applies for "isAuthenticated".
+// Pull out "login", so every time we access the property we don't have to do "props.login", instead simply use this variable directly "login". Same logic applies for "isAuthenticated".
 const Login = ({ login, isAuthenticated }) => {
   // Hooks, pull out state "formData" and use "setFormData" function to update the state from "useState" hook.
   const [formData, setFormData] = useState({

@@ -4,7 +4,7 @@ import React, { Fragment } from "react";
 import Moment from "react-moment";
 import PropTypes from "prop-types";
 
-// Pull out "education", so every time we access the property we don't have to do "props.education". Same logic applies for "deleteEducation".
+// Pull out "education", so every time we access the property we don't have to do "props.education", instead simply use this variable directly "education". Same logic applies for "deleteEducation".
 const Education = ({ education, deleteEducation }) => {
   // Get user's educations.
   const educations = education.map((edu) => (

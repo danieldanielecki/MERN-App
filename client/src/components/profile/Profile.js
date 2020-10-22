@@ -5,6 +5,7 @@ import React, { useEffect, Fragment } from "react";
 import ProfileAbout from "./ProfileAbout";
 import ProfileEducation from "./ProfileEducation";
 import ProfileExperience from "./ProfileExperience";
+import ProfileGithub from "./ProfileGithub";
 import ProfileTop from "./ProfileTop";
 import PropTypes from "prop-types";
 import Spinner from "../layout/Spinner";
@@ -59,7 +60,7 @@ const Profile = ({
                 <h4>No experience credentials</h4>
               )}
             </div>
-            {/* TODO: The CSS isn't working correctly, because on Brad's videos it shows next to each other, not below.*/}
+            {/* TODO: The CSS isn't working correctly, because on Brad's videos it shows next to each other, not below. */}
             <div className="profile-edu bg-white p-2">
               <h2 className="text-primary">Education</h2>
               {/* Check if there's any education, and if so, then display it, otherwise show information about no education credentials. */}
@@ -77,6 +78,10 @@ const Profile = ({
                 <h4>No education credentials</h4>
               )}
             </div>
+            {/* Check if GitHub username exists, if so - display it. */}
+            {profile.githubusername && (
+              <ProfileGithub username={profile.githubusername} />
+            )}
           </div>
         </Fragment>
       )}

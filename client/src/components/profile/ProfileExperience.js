@@ -21,6 +21,7 @@ const ProfileExperience = ({
     </p>
   </div>
 );
+
 // Make sure "experience" prop is required.
 ProfileExperience.propTypes = {
   experience: PropTypes.array.isRequired,

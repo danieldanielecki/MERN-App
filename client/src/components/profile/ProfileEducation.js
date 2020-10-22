@@ -24,6 +24,7 @@ const ProfileEducation = ({
     </p>
   </div>
 );
+
 // Make sure "education" prop is required.
 ProfileEducation.propTypes = {
   education: PropTypes.array.isRequired,

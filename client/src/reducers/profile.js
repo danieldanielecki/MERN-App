@@ -43,6 +43,7 @@ export default function (state = initialState, action) {
         ...state,
         error: payload,
         loading: false,
+        profile: null, // Fix security issue "If a guest user browses a dev profile and then registers, the browsed users profile data is still in the "profile" state and the newly registered user then sees and can edit the users info". Actually, the browsed profile data is in the newly created user's fields and editing caused simply editing these fields, but the data was changed only in the newly registered user.
       };
     case CLEAR_PROFILE:
       // State is immutable, therefore when adding another one it'll be an array. That's why we need to use spread operator to return all of them. On top of this, to fully clear profile, set "profile" to "null", repost to empty array and "loading" to "false".

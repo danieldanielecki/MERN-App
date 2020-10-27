@@ -18,7 +18,7 @@ const initialState = {
 
 // Every reducer takes "state" by default being the "initialState" and an "action".
 export default function (state = initialState, action) {
-  const { type, payload } = action; // Pull out these valeus from the action, so every time we access the property we don't have to do "action.type" etc.
+  const { type, payload } = action; // Pull out these valeus from the action, so every time we access the property we don't have to do "action.type" etc., instead simply "type" etc.
 
   switch (type) {
     // These cases have exactly the same logic, therefore it can be used with simplified "case" statement.

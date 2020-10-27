@@ -20,7 +20,7 @@ const Profile = ({
   // React's Hook "useEffect()", because we're dealing with Functional Components, instead of Class Components and its lifecycle methods such as "componentDidMount()".
   useEffect(() => {
     getProfileById(match.params.id); // Get current profile's ID as soon as the component loads.
-  }, [getProfileById, match.params.id]); // The brackets "[]" here makes "useEffect()" to run only it loads, without brackets "useEffect()" will keep running and it'll be a constant loop. The brackets basically are equivalent to "componentDidMount()" in Class Components. ESLint would say that "getProfileById" and "match.params.id" should be added as dependency between the "[]". Therefore, fix these warnings too.
+  }, [getProfileById, match.params.id]); // The brackets "[]" here makes "useEffect()" to run only it loads, without brackets "useEffect()" will keep running and it'll be a constant loop. The brackets basically are equivalent to "componentDidMount()" in Class Components. ESLint would complain that "getProfileById" and "match.params.id" should be added as dependency between the "[]". Therefore, fix these possible warnings too.
 
   return (
     <Fragment>

@@ -15,6 +15,7 @@ import Landing from "./components/layout/Landing";
 import Login from "./components/auth/Login";
 import Navbar from "./components/layout/Navbar";
 import PrivateRoute from "./components/routing/PrivateRoute";
+import Posts from "./components/posts/Posts";
 import Profile from "./components/profile/Profile";
 import Profiles from "./components/profiles/Profiles";
 import Register from "./components/auth/Register";
@@ -27,7 +28,7 @@ if (localStorage.token) {
 const App = () => {
   // React's Hook "useEffect()", because we're dealing with Functional Components, instead of Class Components and its lifecycle methods such as "componentDidMount()".
   useEffect(() => {
-    store.dispatch(loadUser()); // The way "loadUser" action can be dispatched is by taking the "story" directly and call "dispatch" method, which is a method on a store and we can simply pass in "loadUser()".
+    store.dispatch(loadUser()); // The way "loadUser" action can be dispatched is by taking the "story" directly and call "dispatch" method, which is a method on a store and we can simply pass in "loadUser()". Dispatch it as soon as the component loads.
   }, []); // The brackets "[]" here makes "useEffect()" to run only once, without brackets "useEffect()" will keep running and it'll be a constant loop. The brackets basically are equivalent to "componentDidMount()" in Class Components.
 
   // "<Provider>" must wrap everything, so all component can access the app level state.
@@ -66,6 +67,7 @@ const App = () => {
                 exact
                 path="/add-education"
               />
+              <PrivateRoute component={Posts} exact path="/posts" />
             </Switch>
           </section>
         </Fragment>

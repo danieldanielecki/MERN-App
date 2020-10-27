@@ -8,8 +8,8 @@ import Spinner from "../layout/Spinner";
 const ProfileGithub = ({ username, getGithubRepos, repos }) => {
   // React's Hook "useEffect()", because we're dealing with Functional Components, instead of Class Components and its lifecycle methods such as "componentDidMount()".
   useEffect(() => {
-    getGithubRepos(username);
-  }, [getGithubRepos]); // The brackets "[]" here makes "useEffect()" to run only it loads, without brackets "useEffect()" will keep running and it'll be a constant loop. The brackets basically are equivalent to "componentDidMount()" in Class Components. ESLint would say that "getGithubRepos" should be added as dependency between the "[]". Therefore, fix this. warnings too.
+    getGithubRepos(username); // Get current GitHub repos as soon as the component loads.
+  }, [getGithubRepos]); // The brackets "[]" here makes "useEffect()" to run only it loads, without brackets "useEffect()" will keep running and it'll be a constant loop. The brackets basically are equivalent to "componentDidMount()" in Class Components. ESLint would complain that "getGithubRepos" should be added as dependency between the "[]". Therefore, fix this possible warning too.
 
   return (
     <div className="profile-github">

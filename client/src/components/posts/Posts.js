@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import { getPosts } from "../../actions/post";
 import React, { useEffect, Fragment } from "react";
+import PostItem from "./PostItem";
 import PropTypes from "prop-types";
 import Spinner from "../layout/Spinner";
 
@@ -11,7 +12,24 @@ const Posts = ({ getPosts, post: { posts, loading } }) => {
     getPosts(); // Get posts as soon as the component loads.
   }, [getPosts]); // The brackets "[]" here makes "useEffect()" to run only it loads, without brackets "useEffect()" will keep running and it'll be a constant loop. The brackets basically are equivalent to "componentDidMount()" in Class Components. ESLint would complain that "getPosts" should be added as dependency between the "[]". Therefore, fix this possible warning too.
 
-  return <div></div>;
+  // Since we're getting data and displaying it we want to make sure that the posts/data is loaded. Therefore, as long as it loads - show spinner. That way the UI is not actually rendered unless the data is loaded.
+  return loading ? (
+    <Spinner />
+  ) : (
+    <Fragment>
+      <h1 className="large text-primary">Posts</h1>
+      <p className="lead">
+        <i className="fas fa-user"> Welcome to the community</i>
+      </p>
+      {/* PostForm */}
+      <div className="posts">
+        {/* Loop/map through posts and output each item. */}
+        {posts.map((post) => (
+          <PostItem key={post._id} post={post} />
+        ))}
+      </div>
+    </Fragment>
+  );
 };
 
 // Make sure "getPosts" and "post" props are required.

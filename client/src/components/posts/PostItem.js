@@ -1,13 +1,16 @@
+import { addLike, removeLike } from "../../actions/post";
 import { connect } from "react-redux";
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import PropTypes from "prop-types";
 
-// Pull out "auth", so every time we access the property we don't have to do "props.auth", instead simply use this variable directly "auth". Same logic applies for "post". In addition to that, from "post" pull out "_id", "text", "name", "avatar", "user", "likes", "comments" and "date".
+// Pull out "auth", so every time we access the property we don't have to do "props.auth", instead simply use this variable directly "auth". Same logic applies for "post", "addLike" and "removeLike". In addition to that, from "post" pull out "_id", "text", "name", "avatar", "user", "likes", "comments" and "date".
 const PostItem = ({
   auth,
   post: { _id, text, name, avatar, user, likes, comments, date },
+  addLike,
+  removeLike,
 }) => (
   <div class="post bg-white p-1 my-1">
     <div>
@@ -21,14 +24,18 @@ const PostItem = ({
       <p class="post-date">
         Posted on <Moment format="YYYY/MM/DD">{date}</Moment>
       </p>
-      <button type="button" class="btn btn-light">
+      <button onClick={(e) => addLike(_id)} type="button" class="btn btn-light">
         <i class="fas fa-thumbs-up" />{" "}
         <span>
           {/* Before displaying length of the likes make sure likes exists. */}
           {likes.length > 0 && <span>{likes.length}</span>}
         </span>
       </button>
-      <button type="button" class="btn btn-light">
+      <button
+        onClick={(e) => removeLike(_id)}
+        type="button"
+        class="btn btn-light"
+      >
         <i class="fas fa-thumbs-down" />
       </button>
       <Link to={`/post/${_id}`} class="btn btn-primary">
@@ -59,4 +66,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth, // Whatever State we want or whatever Prop we wanna call it, here it's "auth". "auth" comes from the root reducer, accesing this via "state.auth" to get the state inside "auth". So "props.auth" is becoming available for us, or simply "auth" nested into an object how it's done here.
 });
 
-export default connect(mapStateToProps, {})(PostItem); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. The second is an object with any Actions we wanna use, here there's no Action therefore "null". Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use "connect".
+export default connect(mapStateToProps, { addLike, removeLike })(PostItem); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. The second is an object with any Actions we wanna use. "addLike" allows us to access "props.addLike" or simply "addLike" nested into an object how it's done here. Same logic related to "props" applies to "removeLike". Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use "connect".

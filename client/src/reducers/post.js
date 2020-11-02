@@ -1,4 +1,4 @@
-import { GET_POSTS, POST_ERROR } from "../actions/types";
+import { GET_POSTS, POST_ERROR, UPDATE_LIKES } from "../actions/types";
 
 // Initial state data.
 const initialState = {
@@ -25,6 +25,16 @@ export default function (state = initialState, action) {
       return {
         ...state,
         error: payload,
+        loading: false,
+      };
+    case UPDATE_LIKES:
+      // State is immutable, therefore when adding another one it'll be an array. That's why we need to use spread operator to return all of them. On top of this, return "posts" (explained below in detail) as well as set "loading" to "false" once the request is done.
+      return {
+        ...state,
+        // Map through posts and check if that's the correct one to update (if ID's matches). If that's the correct one then return a new state with all what's in the post ("...post") and we want to manipulate just the likes to that likes which are returned. If it doesn't match the ID then simply return the post and don't do anything with it.
+        posts: state.posts.map((post) =>
+          post._id === payload.id ? { ...post, likes: payload.likes } : post
+        ),
         loading: false,
       };
     default:

@@ -2,6 +2,7 @@
 export const ACCOUNT_DELETED = "ACCOUNT_DELETED";
 export const AUTH_ERROR = "AUTH_ERROR";
 export const CLEAR_PROFILE = "CLEAR_PROFILE";
+export const DELETE_POST = "DELETE_POST";
 export const GET_POSTS = "GET_POSTS";
 export const GET_PROFILE = "GET_PROFILE";
 export const GET_PROFILES = "GET_PROFILES";

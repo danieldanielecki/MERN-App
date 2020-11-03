@@ -1,15 +1,16 @@
-import { addLike, removeLike } from "../../actions/post";
+import { addLike, deletePost, removeLike } from "../../actions/post";
 import { connect } from "react-redux";
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import PropTypes from "prop-types";
 
-// Pull out "auth", so every time we access the property we don't have to do "props.auth", instead simply use this variable directly "auth". Same logic applies for "post", "addLike" and "removeLike". In addition to that, from "post" pull out "_id", "text", "name", "avatar", "user", "likes", "comments" and "date".
+// Pull out "auth", so every time we access the property we don't have to do "props.auth", instead simply use this variable directly "auth". Same logic applies for "post", "addLike", "deletePost" and "removeLike". In addition to that, from "post" pull out "_id", "text", "name", "avatar", "user", "likes", "comments" and "date".
 const PostItem = ({
   auth,
   post: { _id, text, name, avatar, user, likes, comments, date },
   addLike,
+  deletePost,
   removeLike,
 }) => (
   <div class="post bg-white p-1 my-1">
@@ -46,9 +47,13 @@ const PostItem = ({
         )}
       </Link>
       {/* We need to tell who is who, so the delete button shows only for user to whom the post belongs to. The "user" is a post's user and the "auth.user._id" is a logged in user. */}
-      {/* TODO: Check if delete button is being shown after it'll be possible to add posts, because now there are only old posts. */}
+      {/* TODO: Check if delete button is being shown after it'll be possible to add posts, because now there are only old posts. Same applies for actually deleting post. */}
       {!auth.loading && user === auth.user._id && (
-        <button type="button" class="btn btn-danger">
+        <button
+          onClick={(e) => deletePost(_id)}
+          type="button"
+          class="btn btn-danger"
+        >
           <i class="fas fa-times" />
         </button>
       )}
@@ -56,14 +61,19 @@ const PostItem = ({
   </div>
 );
 
-// Make sure "post" and "auth" props are required.
+// Make sure "post", "auth", "addLike", "deletePost" and "removeLike" props are required.
 PostItem.propTypes = {
   post: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
+  addLike: PropTypes.func.isRequired,
+  deletePost: PropTypes.func.isRequired,
+  removeLike: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   auth: state.auth, // Whatever State we want or whatever Prop we wanna call it, here it's "auth". "auth" comes from the root reducer, accesing this via "state.auth" to get the state inside "auth". So "props.auth" is becoming available for us, or simply "auth" nested into an object how it's done here.
 });
 
-export default connect(mapStateToProps, { addLike, removeLike })(PostItem); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. The second is an object with any Actions we wanna use. "addLike" allows us to access "props.addLike" or simply "addLike" nested into an object how it's done here. Same logic related to "props" applies to "removeLike". Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use "connect".
+export default connect(mapStateToProps, { addLike, deletePost, removeLike })(
+  PostItem
+); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. The second is an object with any Actions we wanna use. "addLike" allows us to access "props.addLike" or simply "addLike" nested into an object how it's done here. Same logic related to "props" applies to "deletePost" and "removeLike". Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use "connect".

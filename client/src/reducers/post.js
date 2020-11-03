@@ -1,4 +1,9 @@
-import { GET_POSTS, POST_ERROR, UPDATE_LIKES } from "../actions/types";
+import {
+  DELETE_POST,
+  GET_POSTS,
+  POST_ERROR,
+  UPDATE_LIKES,
+} from "../actions/types";
 
 // Initial state data.
 const initialState = {
@@ -18,6 +23,13 @@ export default function (state = initialState, action) {
       return {
         ...state,
         posts: payload,
+        loading: false,
+      };
+    case DELETE_POST:
+      // State is immutable, therefore when adding another one it'll be an array. That's why we need to use spread operator to return all of them. On top of this, return "posts" (explained below in detail) as well as set "loading" to "false" once the request is done.
+      return {
+        ...state,
+        posts: state.posts.filter((post) => post._id !== payload), // Return all posts except that one which matches here, because that's the one we want to delete. "payload" is in this case simply "id" of the post as it was defined in post.js Actions ("deletePost" method).
         loading: false,
       };
     case POST_ERROR:

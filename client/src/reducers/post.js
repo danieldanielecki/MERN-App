@@ -1,4 +1,5 @@
 import {
+  ADD_POST,
   DELETE_POST,
   GET_POSTS,
   POST_ERROR,
@@ -23,6 +24,13 @@ export default function (state = initialState, action) {
       return {
         ...state,
         posts: payload,
+        loading: false,
+      };
+    case ADD_POST:
+      // State is immutable, therefore when adding another one it'll be an array. That's why we need to use spread operator to return all of them. On top of this, return "posts" (explained below in detail) as well as set "loading" to "false" once the request is done.
+      return {
+        ...state,
+        posts: [payload, ...state.posts], // Make a copy of posts and add a new post, which is in the "payload". Set up "payload" first, so the posts are shown from the newest one to the oldest once they have been added. The same is when getting them from the server, i.e. refreshing browser.
         loading: false,
       };
     case DELETE_POST:

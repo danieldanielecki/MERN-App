@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import { getPosts } from "../../actions/post";
 import React, { useEffect, Fragment } from "react";
+import PostForm from "./PostForm";
 import PostItem from "./PostItem";
 import PropTypes from "prop-types";
 import Spinner from "../layout/Spinner";
@@ -21,7 +22,7 @@ const Posts = ({ getPosts, post: { posts, loading } }) => {
       <p className="lead">
         <i className="fas fa-user"> Welcome to the community</i>
       </p>
-      {/* PostForm */}
+      <PostForm />
       <div className="posts">
         {/* Loop/map through posts and output each item. */}
         {posts.map((post) => (

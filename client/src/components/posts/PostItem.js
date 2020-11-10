@@ -15,10 +15,10 @@ const PostItem = ({
 }) => (
   <div class="post bg-white p-1 my-1">
     <div>
-      <a href="profile.html">
+      <Link to={`/profile/${user}`}>
         <img class="round-img" src={avatar} alt="" />
         <h4>{name}</h4>
-      </a>
+      </Link>
     </div>
     <div>
       <p class="my-1">{text}</p>
@@ -47,7 +47,6 @@ const PostItem = ({
         )}
       </Link>
       {/* We need to tell who is who, so the delete button shows only for user to whom the post belongs to. The "user" is a post's user and the "auth.user._id" is a logged in user. */}
-      {/* TODO: Check if delete button is being shown after it'll be possible to add posts, because now there are only old posts. Same applies for actually deleting post. */}
       {!auth.loading && user === auth.user._id && (
         <button
           onClick={(e) => deletePost(_id)}

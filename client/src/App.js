@@ -15,6 +15,7 @@ import Landing from "./components/layout/Landing";
 import Login from "./components/auth/Login";
 import Navbar from "./components/layout/Navbar";
 import PrivateRoute from "./components/routing/PrivateRoute";
+import Post from "./components/post/Post";
 import Posts from "./components/posts/Posts";
 import Profile from "./components/profile/Profile";
 import Profiles from "./components/profiles/Profiles";
@@ -68,6 +69,7 @@ const App = () => {
                 path="/add-education"
               />
               <PrivateRoute component={Posts} exact path="/posts" />
+              <PrivateRoute component={Post} exact path="/posts/:id" />
             </Switch>
           </section>
         </Fragment>

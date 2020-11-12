@@ -1,6 +1,7 @@
 import {
   ADD_POST,
   DELETE_POST,
+  GET_POST,
   GET_POSTS,
   POST_ERROR,
   UPDATE_LIKES,
@@ -24,6 +25,13 @@ export default function (state = initialState, action) {
       return {
         ...state,
         posts: payload,
+        loading: false,
+      };
+    case GET_POST:
+      // State is immutable, therefore when adding another one it'll be an array. That's why we need to use spread operator to return all of them. On top of this, return "post" which is taken from the response's "payload" as well as set "loading" to "false" once the request is done.
+      return {
+        ...state,
+        post: payload,
         loading: false,
       };
     case ADD_POST:

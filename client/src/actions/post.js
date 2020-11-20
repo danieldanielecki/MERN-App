@@ -1,11 +1,13 @@
 import axios from "axios";
 import { setAlert } from "./alert";
 import {
+  ADD_COMMENT,
   ADD_POST,
   DELETE_POST,
   GET_POST,
   GET_POSTS,
   POST_ERROR,
+  REMOVE_COMMENT,
   UPDATE_LIKES,
 } from "./types";
 
@@ -67,7 +69,7 @@ export const removeLike = (id) => async (dispatch) => {
 // Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "(id)" (which is allowed by the "thunk" middleware and it wraps an expression to delay its evaluation) then "=>", "async (dispatch)" and "=>" again to do so. We need to know which post we're removing from that's why we need "id", which is the post's ID.
 export const deletePost = (id) => async (dispatch) => {
   try {
-    const res = await axios.delete(`/api/posts/${id}`); // Get HTTP's DELETE response.
+    await axios.delete(`/api/posts/${id}`); // Get HTTP's DELETE response.
 
     dispatch({
       type: DELETE_POST, // If request was successful, dispatch "DELETE_POST".
@@ -119,6 +121,56 @@ export const getPost = (id) => async (dispatch) => {
       type: GET_POST, // If request was successful, dispatch "GET_POST".
       payload: res.data, // Payload will be the user's data.
     });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR, // If request was not successful, dispatch "POST_ERROR".
+      msg: { msg: err.response.statusText, status: err.response.status }, // Get the message text and status code from the response.
+    });
+  }
+};
+
+// Add comment.
+// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "(postId, formData)" (which is allowed by the "thunk" middleware and it wraps an expression to delay its evaluation) then "=>", "async (dispatch)" and "=>" again to do so. We need to know to which post we're adding a comment to that's why we need "postId", which is the post's ID.
+export const addComment = (postId, formData) => async (dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  try {
+    const res = await axios.post(
+      `/api/posts/comment/${postId}`,
+      formData,
+      config
+    ); // Get HTTP's POST response.
+
+    dispatch({
+      type: ADD_COMMENT, // If request was successful, dispatch "ADD_COMMENT".
+      payload: res.data, // Payload will be the user's data (here that's a comments array).
+    });
+
+    dispatch(setAlert("Comment Added", "success"));
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR, // If request was not successful, dispatch "POST_ERROR".
+      msg: { msg: err.response.statusText, status: err.response.status }, // Get the message text and status code from the response.
+    });
+  }
+};
+
+// Delete comment.
+// Dispatch more than 1 action type from this function. We're able to do it because of the "thunk" middleware, the crucial point is "(postId, commentId)" (which is allowed by the "thunk" middleware and it wraps an expression to delay its evaluation) then "=>", "async (dispatch)" and "=>" again to do so. We need to know from which post we're deleting a comment to that's why we need "postId", which is the post's ID. We also need to know which comment we're deleting that's why we need "commentId", which is the comment's ID.
+export const deleteComment = (postId, commentId) => async (dispatch) => {
+  try {
+    await axios.delete(`/api/posts/comment/${postId}/${commentId}`); // Get HTTP's DELETE response.
+
+    dispatch({
+      type: REMOVE_COMMENT, // If request was successful, dispatch "REMOVE_COMMENT".
+      payload: commentId, // Payload will be the comment's ID.
+    });
+
+    dispatch(setAlert("Comment Removed", "success"));
   } catch (err) {
     dispatch({
       type: POST_ERROR, // If request was not successful, dispatch "POST_ERROR".

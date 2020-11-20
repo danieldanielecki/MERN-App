@@ -3,8 +3,10 @@ import { connect } from "react-redux";
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
+// Pull out "addPost", so every time we access the property we don't have to do "props.addPost", instead simply use this variable directly "addPost".
 const PostForm = ({ addPost }) => {
   const [text, setText] = useState(""); // Since we only have 1 field for this form it'll be an empty string instead of "formData" object which was used before.
+
   return (
     <div class="post-form">
       <div class="bg-primary p">
@@ -24,7 +26,7 @@ const PostForm = ({ addPost }) => {
           rows="5"
           placeholder="Create a post"
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => setText(e.target.value)} // Set text to whatever is in the textbox.
           required
         ></textarea>
         <input type="submit" class="btn btn-dark my-1" value="Submit" />

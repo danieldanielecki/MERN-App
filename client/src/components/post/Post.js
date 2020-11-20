@@ -2,6 +2,7 @@ import { connect } from "react-redux";
 import { getPost } from "../../actions/post";
 import React, { useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
+import CommentForm from "../post/CommentForm";
 import PostItem from "../posts/PostItem";
 import PropTypes from "prop-types";
 import Spinner from "../layout/Spinner";
@@ -21,6 +22,8 @@ const Post = ({ getPost, post: { post, loading }, match }) => {
         Back To Posts
       </Link>
       <PostItem post={post} showActions={false} />
+      {/* Show comment form with with post ID to which it has to be linked to. */}
+      <CommentForm postId={post._id} />
     </Fragment>
   );
 };

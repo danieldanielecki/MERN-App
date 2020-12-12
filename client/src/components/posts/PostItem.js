@@ -54,7 +54,7 @@ const PostItem = ({
               <span class="comment-count">{comments.length}</span>
             )}
           </Link>
-          {/* We need to tell who is who, so the delete button shows only for user to whom the post belongs to. The "user" is a post's user and the "auth.user._id" is a logged in user. */}
+          {/* We need to tell who is who, so the delete button shows only for user to whom the post belongs to. The "user" is a post's user and the "auth.user._id" is a logged in user. The "_id" is the comment's ID. Obviously "postID" is the post's ID. */}
           {!auth.loading && user === auth.user._id && (
             <button
               onClick={(e) => deletePost(_id)}

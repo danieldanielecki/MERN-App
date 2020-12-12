@@ -3,6 +3,7 @@ import { getPost } from "../../actions/post";
 import React, { useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
 import CommentForm from "../post/CommentForm";
+import CommentItem from "../post/CommentItem";
 import PostItem from "../posts/PostItem";
 import PropTypes from "prop-types";
 import Spinner from "../layout/Spinner";
@@ -24,6 +25,12 @@ const Post = ({ getPost, post: { post, loading }, match }) => {
       <PostItem post={post} showActions={false} />
       {/* Show comment form with with post ID to which it has to be linked to. */}
       <CommentForm postId={post._id} />
+      <div className="comments">
+        {/* Loop/map through comments in certain post and output each item. */}
+        {post.comments.map((comment) => (
+          <CommentItem key={comment._id} comment={comment} postId={post._id} />
+        ))}
+      </div>
     </Fragment>
   );
 };
@@ -39,4 +46,4 @@ const mapStateToProps = (state) => ({
   post: state.post,
 });
 
-export default connect(mapStateToProps, { getPost })(Post);
+export default connect(mapStateToProps, { getPost })(Post); // Connect Redux's Actions to the component. Whenever we want to use an Action, we need to pass it to the "connect(...)". First parameter is any state we want to map. The second is an object with any Actions we wanna use. "getPost" allows us to access "props.getPost" or simply "getPost" nested into an object how it's done here. Basically, whenever we want to interact component with Redux (calling an Action or getting a State) we wanna use "connect".

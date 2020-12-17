@@ -15,14 +15,12 @@ export const setAlert = (msg, alertType, timeout = 5000) => (dispatch) => {
     },
   });
 
-  // Dispatch removing an alert with an ID as a payload after specific time (default: 5 seconds). TODO: This alert doesn't disappears on the UI, however it works fine in the Redux DevTools.
+  // Dispatch removing an alert with an ID as a payload after specific time (default: 5 seconds).
   setTimeout(
     () =>
       dispatch({
         type: REMOVE_ALERT,
-        payload: {
-          id,
-        },
+        payload: id,
       }),
     timeout
   );

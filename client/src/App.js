@@ -5,21 +5,9 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import setAuthToken from "./utils/setAuthToken";
 import store from "./store";
-import AddEducation from "./components/profile-forms/AddEducation";
-import AddExperience from "./components/profile-forms/AddExperience";
-import Alert from "./components/layout/Alert";
-import CreateProfile from "./components/profile-forms/CreateProfile";
-import Dashboard from "./components/dashboard/Dashboard";
-import EditProfile from "./components/profile-forms/EditProfile";
 import Landing from "./components/layout/Landing";
-import Login from "./components/auth/Login";
 import Navbar from "./components/layout/Navbar";
-import PrivateRoute from "./components/routing/PrivateRoute";
-import Post from "./components/post/Post";
-import Posts from "./components/posts/Posts";
-import Profile from "./components/profile/Profile";
-import Profiles from "./components/profiles/Profiles";
-import Register from "./components/auth/Register";
+import Routes from "./components/routing/Routes";
 
 // Check if there is a token and if it is then put this into a global header.
 if (localStorage.token) {
@@ -38,40 +26,10 @@ const App = () => {
       <Router>
         <Fragment>
           <Navbar />
-          <Route component={Landing} exact path="/" />
-          <section className="container">
-            <Alert />
-            <Switch>
-              <Route component={Register} exact path="/register" />
-              <Route component={Login} exact path="/login" />
-              <Route component={Profiles} exact path="/profiles" />
-              <Route component={Profile} exact path="/profile/:id" />
-              {/* Make the routes are protected. */}
-              <PrivateRoute component={Dashboard} exact path="/dashboard" />
-              <PrivateRoute
-                component={CreateProfile}
-                exact
-                path="/create-profile"
-              />
-              <PrivateRoute
-                component={EditProfile}
-                exact
-                path="/edit-profile"
-              />
-              <PrivateRoute
-                component={AddExperience}
-                exact
-                path="/add-experience"
-              />
-              <PrivateRoute
-                component={AddEducation}
-                exact
-                path="/add-education"
-              />
-              <PrivateRoute component={Posts} exact path="/posts" />
-              <PrivateRoute component={Post} exact path="/posts/:id" />
-            </Switch>
-          </section>
+          <Switch>
+            <Route component={Landing} exact path="/" />
+            <Route component={Routes} />
+          </Switch>
         </Fragment>
       </Router>
     </Provider>

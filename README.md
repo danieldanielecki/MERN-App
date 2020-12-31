@@ -10,6 +10,7 @@ This repository holds source code for [MERN Stack Front To Back: Full Stack Reac
 - Stateless JWT authentication practices
 - React Hooks, Async/Await
 - Deploy to Heroku with a postbuild script
+- GitHub API
 
 URL of the app: [https://thawing-shelf-18696.herokuapp.com](https://thawing-shelf-18696.herokuapp.com)
 
